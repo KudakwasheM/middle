@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import colors from "colors";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+import fundRoutes from "./routes/fundRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 
 const port = process.env.PORT || 8000;
@@ -23,6 +26,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/funds", fundRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

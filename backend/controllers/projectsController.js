@@ -4,7 +4,7 @@ import Project from "../models/projectModel.js";
 // @desc        Get all projects
 // Router       Get /api/projects
 // Access       Public
-const projects = asyncHandler(async (req, res) => {
+const getProjects = asyncHandler(async (req, res) => {
   const projects = await Project.find();
 
   res.status(200).json({
@@ -105,4 +105,4 @@ const deleteProject = asyncHandler(async (req, res) => {
   });
 });
 
-export { projects, setProject, getProject, updateProject, deleteProject };
+export { getProjects, setProject, getProject, updateProject, deleteProject };

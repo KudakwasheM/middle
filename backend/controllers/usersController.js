@@ -124,3 +124,5 @@ const deleteUser = asyncHandler(async (req, res) => {
     message: "Users deleted successfully",
   });
 });
+
+export { getUsers, getUser, setUser, updateUser, deleteUser };
