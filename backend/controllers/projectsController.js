@@ -17,15 +17,21 @@ const getProjects = asyncHandler(async (req, res) => {
 //route     Post api/projects
 //access    Private
 const setProject = asyncHandler(async (req, res) => {
-  if (
-    !req.body.name ||
-    !req.body.type ||
-    !req.body.location ||
-    !req.body.description ||
-    !req.body.expected_fund
-  ) {
+  if (!req.body.name) {
     res.status(400);
-    throw new Error("Please add a text field");
+    throw new Error("Please add a name field");
+  } else if (!req.body.type) {
+    res.status(400);
+    throw new Error("Please add a type field");
+  } else if (!req.body.location) {
+    res.status(400);
+    throw new Error("Please add a location field");
+  } else if (!req.body.description) {
+    res.status(400);
+    throw new Error("Please add a description field");
+  } else if (!req.body.expected_fund) {
+    res.status(400);
+    throw new Error("Please add a expected fund field");
   }
 
   const project = await Project.create({

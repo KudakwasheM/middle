@@ -10,6 +10,11 @@ const fundSchema = mongoose.Schema({
     required: true,
     ref: "User",
   },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Project",
+  },
 });
 
 const Fund = mongoose.model("Fund", fundSchema);

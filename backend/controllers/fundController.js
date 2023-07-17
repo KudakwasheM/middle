@@ -17,9 +17,12 @@ const getFunds = asyncHandler(async (req, res) => {
 //route     Post api/funds
 //access    Private
 const setFund = asyncHandler(async (req, res) => {
-  if (!req.body.amount || !req.body.investor) {
+  if (!req.body.amount) {
     res.status(400);
-    throw new Error("Please add a text field");
+    throw new Error("Please add amount field");
+  } else if (!req.body.investor) {
+    res.status(400);
+    throw new Error("Please add investor field");
   }
 
   const fund = await Fund.create({
