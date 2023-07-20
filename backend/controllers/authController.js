@@ -37,14 +37,9 @@ const register = asyncHandler(async (req, res) => {
   const { name, username, active, email, role, password } = req.body;
 
   const emailExist = await User.findOne({ email });
-  const usernameExist = await User.findOne({ username });
-
   if (emailExist) {
     res.status(400);
     throw new Error("Email already exists");
-  } else if (usernameExist) {
-    res.status(400);
-    throw new Error("Username already exists");
   }
 
   const user = await User.create({
@@ -64,6 +59,7 @@ const register = asyncHandler(async (req, res) => {
       username: user.username,
       email: user.email,
       active: user.active,
+      subscribed: user.subscribed,
       role: user.role,
     });
   } else {
@@ -84,7 +80,7 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 //@desc     Get user profile
-//route     GET /api/profile
+//route     GET /api/profile/
 //@access   Private
 const profile = asyncHandler(async (req, res) => {
   const user = {

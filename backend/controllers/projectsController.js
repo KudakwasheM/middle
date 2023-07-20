@@ -31,7 +31,10 @@ const setProject = asyncHandler(async (req, res) => {
     throw new Error("Please add a description field");
   } else if (!req.body.expected_fund) {
     res.status(400);
-    throw new Error("Please add a expected fund field");
+    throw new Error("Please add an expected fund field");
+  } else if (!req.body.enterprenuer) {
+    res.status(400);
+    throw new Error("Please add enterprenuer");
   }
 
   const project = await Project.create({
@@ -41,6 +44,7 @@ const setProject = asyncHandler(async (req, res) => {
     short_description: req.body.short_description,
     description: req.body.description,
     expected_fund: req.body.expected_fund,
+    enterprenuer: req.body.enterprenuer,
   });
 
   res.status(201).json({

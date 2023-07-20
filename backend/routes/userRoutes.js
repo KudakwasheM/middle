@@ -6,15 +6,15 @@ import {
   setUser,
   updateUser,
 } from "../controllers/usersController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { admin, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(protect, getUsers).post(protect, setUser);
+router.route("/").get(admin, getUsers).post(admin, setUser);
 router
   .route("/:id")
-  .get(protect, getUser)
-  .put(protect, updateUser)
-  .delete(protect, deleteUser);
+  .get(admin, getUser)
+  .put(admin, updateUser)
+  .delete(admin, deleteUser);
 
 export default router;

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteInvestment,
+  getInvestment,
   getInvestments,
   setInvestment,
   updateInvestment,

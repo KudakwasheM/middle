@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema(
     active: {
       type: Boolean,
     },
+    subscribed: {
+      type: Boolean,
+      default: false,
+    },
     role: {
       type: String,
       required: true,

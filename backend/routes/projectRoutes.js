@@ -14,7 +14,7 @@ router.route("/").get(protect, getProjects).post(protect, setProject);
 router
   .route("/:id")
   .get(protect, getProject)
-  .put(protect, updateProject)
+  .put(updateProject)
   .delete(protect, deleteProject);
 
 export default router;

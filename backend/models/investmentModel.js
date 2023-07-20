@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
 
-const investmetSchema = mongoose.Schema({
-  amount: {
-    type: mongoose.Types.Decimal128,
-    required: true,
+const investmetSchema = mongoose.Schema(
+  {
+    amount: {
+      type: mongoose.Types.Decimal128,
+      required: true,
+    },
+    project_types: {
+      type: [String],
+    },
+    investor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
-  project_types: {
-    type: [String],
-  },
-  investor: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Investment = mongoose.model("Investment", investmetSchema);
 
