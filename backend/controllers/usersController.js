@@ -50,8 +50,9 @@ const setUser = asyncHandler(async (req, res) => {
   const user = await User.create({
     name,
     username,
-    active,
     email,
+    active,
+    subscribed,
     role,
     password,
   });
@@ -64,6 +65,7 @@ const setUser = asyncHandler(async (req, res) => {
       username: user.username,
       email: user.email,
       active: user.active,
+      subscribed: user.subscribed,
       role: user.role,
     });
   } else {
@@ -83,6 +85,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.active = req.body.active || user.active;
+    // user.subscribed = req.body.subscribed || user.subscribed;
 
     if (req.body.password) {
       user.password = req.body.password;

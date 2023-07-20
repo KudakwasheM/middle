@@ -19,6 +19,7 @@ const userSchema = mongoose.Schema(
     },
     active: {
       type: Boolean,
+      default: true,
     },
     subscribed: {
       type: Boolean,
