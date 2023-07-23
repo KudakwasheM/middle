@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [nav, setNav] = useState(true);
@@ -19,6 +20,12 @@ const Navbar = () => {
         <li className="p-4 hover:text-[rgb(0,223,154)]">About</li>
         <li className="p-4 hover:text-[rgb(0,223,154)]">Projects</li>
         <li className="p-4 hover:text-[rgb(0,223,154)]">Contact</li>
+        <Link
+          to="/login"
+          className="p-4 bg-slate-100 hover:text-[rgba(0,223,154,0.59)] rounded-3xl"
+        >
+          <li>Account</li>
+        </Link>
       </ul>
       <div onClick={handleNav} className="block md:hidden">
         {!nav ? (
