@@ -1,43 +1,54 @@
 import { Navigate, Route, createBrowserRouter } from "react-router-dom";
-import Guests from "./layouts/guests";
-import Administration from "./layouts/administration";
-import Enterprenuer from "./layouts/enterprenuer";
-import Investor from "./layouts/investor";
+import Guests from "./layouts/Guests";
+import Administration from "./layouts/Administration";
+import Enterprenuer from "./layouts/Enterprenuer";
+import Investor from "./layouts/Investor";
 import Index from "./Guests/Index";
 import Login from "./Guests/Login";
 import Register from "./Guests/Register";
 import AdminDash from "./administration/AdminDash";
 import EnterprenuerDash from "./enterprenuer/EnterprenuerDash";
 import NotFound from "./NotFound";
+import InvestorDash from "./investor/InvestorDash";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Guests />,
+    children: [
+      { path: "/", element: <Index /> },
+      { path: "/login", element: <Login /> },
+      { path: "register", element: <Register /> },
+    ],
+  },
+  {
+    path: "/admin",
     element: <Administration />,
     children: [
-      { path: "/", element: <Navigate to="/admin" /> },
-      { path: "/admin", element: <AdminDash /> },
+      { path: "/admin", element: <Navigate to="/admin/dashboard" /> },
+      { path: "dashboard", element: <AdminDash /> },
+      // { path: "users", element: <U /> },
     ],
   },
   {
-    path: "/",
+    path: "/enterprenuer",
     element: <Enterprenuer />,
     children: [
-      { path: "/", element: <Navigate to="/enterprenuer" /> },
-      { path: "/enterprenuer", element: <EnterprenuerDash /> },
+      {
+        path: "/enterprenuer",
+        element: <Navigate to="/enterprenuer/dashboard" />,
+      },
+      { path: "dashboard", element: <EnterprenuerDash /> },
     ],
   },
   {
-    path: "/",
+    path: "/investor",
     element: <Investor />,
+    children: [
+      { path: "/investor", element: <Navigate to="/investor/dashboard" /> },
+      { path: "dashboard", element: <InvestorDash /> },
+    ],
   },
-  {
-    path: "/",
-    element: <Guests />,
-    children: [{ path: "/", element: <Index /> }],
-  },
-  { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
   { path: "*", element: <NotFound /> },
 ]);
 

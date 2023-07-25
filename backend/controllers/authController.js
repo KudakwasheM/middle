@@ -7,6 +7,12 @@ import User from "../models/userModel.js";
 //@access   Public
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  if (req.body.email === "" || req.body.password === "") {
+    res.status(401);
+    throw new Error("Fill in all fields");
+  }
+
   const user = await User.findOne({ email });
 
   if (!user.active) {
@@ -47,7 +53,6 @@ const register = asyncHandler(async (req, res) => {
     username,
     email,
     active,
-    subscribed,
     role,
     password,
   });

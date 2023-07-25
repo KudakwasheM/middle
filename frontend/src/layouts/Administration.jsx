@@ -1,11 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineAccountBook } from "react-icons/ai";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../slices/authApiSlice";
+import { logout } from "../slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Administration = () => {
-  const [user, setUser] = useState(null);
+  const { userInfo } = useSelector((state) => state.auth);
+  const [logoutApiCall] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/");
+    } catch (err) {
+      toast.error(err);
+    }
+  };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/");
+    } else {
+      const role = userInfo.role;
+      switch (role) {
+        case "Enterprenuer":
+          navigate("/enterprenuer/dashboard");
+          break;
+        case "Investor":
+          navigate("/investor/dashboard");
+          break;
+        default:
+          break;
+      }
+    }
+  }, [userInfo]);
   return (
     <div className="h-screen max-w-screen grid grid-cols-6 bg-[rgb(240,240,240)]">
       <aside className="flex flex-col bg-[rgb(0,0,0)] p-5 col-span-1 max-h-full">
@@ -51,6 +84,7 @@ const Administration = () => {
         <div>
           <Link
             to="/"
+            onClick={logoutHandler}
             className="text-red-500 p-3 mb-1 w-full flex items-center hover:bg-red-500 hover:text-white"
           >
             <span className="mr-2">
@@ -62,8 +96,9 @@ const Administration = () => {
       </aside>
       <div className=" max-h-full col-span-5 overflow-y-scroll">
         <div className="flex border-b h-14 items-center justify-end p-5 bg-white">
-          User Name
+          {userInfo ? <p>{userInfo.name}</p> : ""}
         </div>
+        <ToastContainer />
         <div className="">
           <Outlet />
         </div>
