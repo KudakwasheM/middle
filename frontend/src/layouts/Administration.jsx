@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineAccountBook } from "react-icons/ai";
+import {
+  AiOutlineAccountBook,
+  AiOutlineHome,
+  AiOutlineProject,
+  AiOutlineTeam,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/authApiSlice";
 import { logout } from "../slices/authSlice";
@@ -45,40 +51,49 @@ const Administration = () => {
         <h1 className="text-3xl font-bold text-[rgb(0,223,154)]">Middle.</h1>
         <div className="flex flex-col flex-1 text-white pt-10">
           <Link
-            to="/"
+            to="/admin/dashboard"
             className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
           >
             <span className="mr-2">
-              <AiOutlineAccountBook size={25} />
+              <AiOutlineHome size={25} />
             </span>
             Dashboard
           </Link>
           <Link
-            to="/"
+            to="/admin/projects"
             className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
           >
             <span className="mr-2">
-              <AiOutlineAccountBook size={25} />
+              <AiOutlineProject size={25} />
             </span>
             Projects
           </Link>
           <Link
-            to="/"
+            to="/admin/investors"
             className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
           >
             <span className="mr-2">
-              <AiOutlineAccountBook size={25} />
-            </span>
-            Interprenuers
-          </Link>
-          <Link
-            to="/"
-            className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
-          >
-            <span className="mr-2">
-              <AiOutlineAccountBook size={25} />
+              <AiOutlineProject size={25} />
             </span>
             Investors
+          </Link>
+          <Link
+            to="/admin/funds"
+            className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
+          >
+            <span className="mr-2">
+              <AiOutlineProject size={25} />
+            </span>
+            Funds
+          </Link>
+          <Link
+            to="/admin/users"
+            className="p-3 mb-1 w-full flex items-center hover:bg-white hover:text-black"
+          >
+            <span className="mr-2">
+              <AiOutlineTeam size={25} />
+            </span>
+            Users
           </Link>
         </div>
         <div>
@@ -94,12 +109,21 @@ const Administration = () => {
           </Link>
         </div>
       </aside>
-      <div className=" max-h-full col-span-5 overflow-y-scroll">
+      <div className="max-h-full col-span-5">
         <div className="flex border-b h-14 items-center justify-end p-5 bg-white">
-          {userInfo ? <p>{userInfo.name}</p> : ""}
+          {userInfo ? (
+            <p className="flex items-center p-2 hover:bg-slate-100 rounded-full">
+              {userInfo?.name}
+              <span>
+                <AiOutlineUser size={20} className="ml-2" />
+              </span>
+            </p>
+          ) : (
+            ""
+          )}
         </div>
         <ToastContainer />
-        <div className="">
+        <div className="h-full overflow-y-scroll">
           <Outlet />
         </div>
       </div>

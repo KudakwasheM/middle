@@ -10,16 +10,14 @@ import AdminDash from "./administration/AdminDash";
 import EnterprenuerDash from "./enterprenuer/EnterprenuerDash";
 import NotFound from "./NotFound";
 import InvestorDash from "./investor/InvestorDash";
+import Users from "./administration/users/Users";
+import UsersForm from "./administration/users/UsersForm";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Guests />,
-    children: [
-      { path: "/", element: <Index /> },
-      { path: "/login", element: <Login /> },
-      { path: "register", element: <Register /> },
-    ],
+    children: [{ path: "/", element: <Index /> }],
   },
   {
     path: "/admin",
@@ -27,7 +25,9 @@ const router = createBrowserRouter([
     children: [
       { path: "/admin", element: <Navigate to="/admin/dashboard" /> },
       { path: "dashboard", element: <AdminDash /> },
-      // { path: "users", element: <U /> },
+      { path: "users", element: <Users /> },
+      { path: "users/add", element: <UsersForm /> },
+      { path: "users/add/:id", element: <UsersForm /> },
     ],
   },
   {
@@ -49,6 +49,8 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <InvestorDash /> },
     ],
   },
+  { path: "/login", element: <Login /> },
+  { path: "register", element: <Register /> },
   { path: "*", element: <NotFound /> },
 ]);
 

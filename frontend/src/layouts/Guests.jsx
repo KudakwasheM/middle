@@ -1,4 +1,5 @@
 import React from "react";
+import "../Guests/css/Guest.css";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Guests/components/Navbar";
 import { ToastContainer } from "react-toastify";
