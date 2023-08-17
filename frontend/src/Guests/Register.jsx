@@ -30,7 +30,7 @@ const Register = () => {
           navigate("/enterprenuer");
           break;
         case "Investor":
-          navigate("/investor");
+          navigate("/enterprenuer");
           break;
         default:
           // navigate("/");
@@ -61,7 +61,7 @@ const Register = () => {
         console.log(res);
         // navigate("/");
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error("Hello");
       }
     }
   };
@@ -76,17 +76,29 @@ const Register = () => {
         <form>
           <div className="flex justify-around mb-2">
             <div className="justify-around">
-              <input type="radio" name="role" id="enterprenuer" />
+              <input
+                type="radio"
+                name="role"
+                id="enterprenuer"
+                value="Enterprenuer"
+                onChange={(e) => setRole(e.target.value)}
+              />
               Enterprenuer
             </div>
             <div className="justify-around">
-              <input type="radio" name="role" id="investor" />
+              <input
+                type="radio"
+                name="role"
+                id="investor"
+                value="Investor"
+                onChange={(e) => setRole(e.target.value)}
+              />
               Investor
             </div>
           </div>
           <div className="flex flex-col mb-2">
             <label htmlFor="" className="mb-1">
-              Email
+              Full Name
             </label>
             <input
               type="text"

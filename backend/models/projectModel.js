@@ -6,7 +6,7 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    type: {
+    website: {
       type: String,
       required: true,
     },
@@ -14,16 +14,26 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    short_description: {
+    mobile: {
       type: String,
+      required: true,
     },
-    description: {
+    industry: [String],
+    stage: {
       type: String,
       required: true,
     },
     expected_fund: {
       type: mongoose.Types.Decimal128,
       required: true,
+    },
+    raised_fund: {
+      type: mongoose.Types.Decimal128,
+      default: 0,
+    },
+    investor_percentage: {
+      type: mongoose.Types.Decimal128,
+      default: 0,
     },
     enterprenuer: {
       type: mongoose.Schema.Types.ObjectId,

@@ -11,7 +11,7 @@ import fundRoutes from "./routes/fundRoutes.js";
 import investmentRoutes from "./routes/investmentRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 connectDB();
 

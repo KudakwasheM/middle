@@ -12,12 +12,29 @@ import NotFound from "./NotFound";
 import InvestorDash from "./investor/InvestorDash";
 import Users from "./administration/users/Users";
 import UsersForm from "./administration/users/UsersForm";
+import Proposals from "./Guests/Proposals/Proposals";
+import Proposal from "./Guests/Proposals/Proposal";
+import Sponsors from "./Guests/Sponsors/Sponsors";
+import Sponsor from "./Guests/Sponsors/Sponsor";
+import Testimonial from "./Guests/Testimonials/Testimonial";
+import Testimonials from "./Guests/Testimonials/Testimonials";
+import Projects from "./administration/projects/Projects";
+import ProjectForm from "./administration/projects/ProjectForm";
+import Investors from "./administration/investors/Investors";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Guests />,
-    children: [{ path: "/", element: <Index /> }],
+    children: [
+      { path: "/", element: <Index /> },
+      { path: "/proposals", element: <Proposals /> },
+      { path: "/proposals/:id", element: <Proposal /> },
+      { path: "/investors", element: <Sponsors /> },
+      { path: "/investors/:id", element: <Sponsor /> },
+      { path: "/testimonials", element: <Testimonials /> },
+      { path: "/testimonials/:id", element: <Testimonial /> },
+    ],
   },
   {
     path: "/admin",
@@ -25,6 +42,9 @@ const router = createBrowserRouter([
     children: [
       { path: "/admin", element: <Navigate to="/admin/dashboard" /> },
       { path: "dashboard", element: <AdminDash /> },
+      { path: "projects", element: <Projects /> },
+      { path: "projects/add", element: <ProjectForm /> },
+      { path: "investors", element: <Investors /> },
       { path: "users", element: <Users /> },
       { path: "users/add", element: <UsersForm /> },
       { path: "users/add/:id", element: <UsersForm /> },

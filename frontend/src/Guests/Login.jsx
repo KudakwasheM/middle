@@ -27,7 +27,7 @@ const Login = () => {
           navigate("/enterprenuer");
           break;
         case "Investor":
-          navigate("/investor");
+          navigate(-1);
           break;
         default:
           navigate("/login");

@@ -13,12 +13,21 @@
   background-color: gray;
 }
 
-/* .barCompleted {
-  background-color: rgb(0, 223, 154);
-  width: 80%;
-} */
-
 .label {
   font-size: 0px;
   color: green;
+}
+
+.opp {
+  background-image: url("../../assets/social-hands.jpg");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}
+
+.banner {
+  background-image: url("../../assets/hands.jpg");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
 }

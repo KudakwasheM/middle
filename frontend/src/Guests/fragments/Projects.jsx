@@ -20,8 +20,8 @@ const Projects = () => {
         Browse our latest exciting startup pitches and connect with
         entrepreneurs to discuss further.
       </p>
-      <div className="grid md:grid-cols-3 gap-10 mx-20 my-10 ">
-        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)]">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mx-5 lg:mx-20 my-10">
+        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)] hover:shadow-lg">
           <div className="h-32">No Image</div>
           <div className="w-full bg-slate-500 h-[3px]">
             <div
@@ -54,13 +54,16 @@ const Projects = () => {
               </div>
             </div>
             <div className="mt-5">
-              <button className="bg-[rgb(45,168,234)] py-2 px-3 text-white text-sm rounded">
+              <Link
+                to="/innovations/id"
+                className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
+              >
                 Find Out More
-              </button>
+              </Link>
             </div>
           </div>
         </div>
-        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)]">
+        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)] hover:shadow-lg">
           <div className="h-32">No Image</div>
           <div className="w-full bg-slate-500 h-[3px]">
             <div
@@ -93,13 +96,16 @@ const Projects = () => {
               </div>
             </div>
             <div className="mt-5">
-              <button className="bg-[rgb(45,168,234)] py-2 px-3 text-white text-sm rounded">
+              <Link
+                to="/innovations/id"
+                className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
+              >
                 Find Out More
-              </button>
+              </Link>
             </div>
           </div>
         </div>
-        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)]">
+        <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)] hover:shadow-xl">
           <div className="h-32">No Image</div>
           <div className="w-full bg-slate-500 h-[3px]">
             <div
@@ -132,9 +138,12 @@ const Projects = () => {
               </div>
             </div>
             <div className="mt-5">
-              <button className="bg-[rgb(45,168,234)] py-2 px-3 text-white text-sm rounded">
+              <Link
+                to="/innovations/id"
+                className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
+              >
                 Find Out More
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -143,7 +152,7 @@ const Projects = () => {
         <p className="mb-5">
           Browser enterprenuer ideas, startups from all over Zimbabwe
         </p>
-        <Link className="text-blue-400 p-10">View more</Link>
+        <Link className="text-blue-400 hover:underline">View more</Link>
       </div>
     </div>
   );

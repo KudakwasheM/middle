@@ -2,6 +2,8 @@ import React from "react";
 import Hero from "./fragments/Hero";
 import Projects from "./fragments/Projects";
 import Investors from "./fragments/Investors";
+import Opportunities from "./fragments/Opportunities";
+import Testimonials from "./fragments/Testimonials";
 
 const Index = () => {
   return (
@@ -9,6 +11,8 @@ const Index = () => {
       <Hero />
       <Projects />
       <Investors />
+      <Opportunities />
+      <Testimonials />
     </div>
   );
 };

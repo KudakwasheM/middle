@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ route }) => {
   const [nav, setNav] = useState(true);
 
   const handleNav = () => {
@@ -15,17 +15,61 @@ const Navbar = () => {
         <h1 className="w-full text-3xl font-bold text-[rgb(0,223,154)]">
           Middle.
         </h1>
-        <ul className="hidden md:flex">
-          <li className="p-4 hover:text-[rgb(0,223,154)]">Home</li>
+        <ul className="hidden md:flex items-center justify-between">
+          <li className="hover:text-[rgb(0,223,154)] mr-5">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "border-b-2 border-[rgb(0,223,154)] pb-2 text-[rgb(0,223,154)]"
+                  : ""
+              }
+            >
+              Home
+            </NavLink>
+          </li>
           {/* <li className="p-4">Resources</li> */}
-          <li className="p-4 hover:text-[rgb(0,223,154)]">About</li>
-          <li className="p-4 hover:text-[rgb(0,223,154)]">Projects</li>
-          <li className="p-4 hover:text-[rgb(0,223,154)]">Contact</li>
-          <Link
-            to="/login"
-            className="p-4 bg-[rgba(0,223,154,0.05)] hover:text-[rgba(0,223,154,0.59)] rounded-full"
-          >
-            <li>Account</li>
+          <li className="hover:text-[rgb(0,223,154)] mr-5">
+            <NavLink
+              to="/proposals"
+              className={({ isActive }) =>
+                isActive
+                  ? "border-b-2 border-[rgb(0,223,154)] pb-2 text-[rgb(0,223,154)]"
+                  : ""
+              }
+            >
+              Proposals
+            </NavLink>
+          </li>
+          <li className="hover:text-[rgb(0,223,154)] mr-5">
+            <NavLink
+              to="/investors"
+              className={({ isActive }) =>
+                isActive
+                  ? "border-b-2 border-[rgb(0,223,154)] pb-2 text-[rgb(0,223,154)]"
+                  : ""
+              }
+            >
+              Investors
+            </NavLink>
+          </li>
+          <li className="hover:text-[rgb(0,223,154)] mr-5">
+            <NavLink
+              to="/testimonials"
+              className={({ isActive }) =>
+                isActive
+                  ? "border-b-2 border-[rgb(0,223,154)] pb-2 text-[rgb(0,223,154)]"
+                  : ""
+              }
+            >
+              Testimonials
+            </NavLink>
+          </li>
+
+          <Link to="/login" className="ml-5">
+            <li className="py-2 px-3 bg-[rgba(0,223,154,0.08)] hover:text-[rgba(0,223,154,0.59)] rounded-full">
+              Account
+            </li>
           </Link>
         </ul>
         <div onClick={handleNav} className="block md:hidden">
