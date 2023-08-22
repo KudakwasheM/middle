@@ -1,4 +1,4 @@
-export default Industries = [
+export const industries = [
   { name: "Farming", img_url: "" },
   { name: "Mining", img_url: "" },
   { name: "Software", img_url: "" },

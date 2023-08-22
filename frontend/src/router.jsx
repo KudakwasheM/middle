@@ -51,12 +51,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/enterprenuer",
+    path: "/enterpreneur",
     element: <Enterprenuer />,
     children: [
       {
-        path: "/enterprenuer",
-        element: <Navigate to="/enterprenuer/dashboard" />,
+        path: "/enterpreneur",
+        element: <Navigate to="/enterpreneur/dashboard" />,
       },
       { path: "dashboard", element: <EnterprenuerDash /> },
     ],

@@ -19,32 +19,41 @@ const getProjects = asyncHandler(async (req, res) => {
 const setProject = asyncHandler(async (req, res) => {
   if (!req.body.name) {
     res.status(400);
-    throw new Error("Please add a name field");
-  } else if (!req.body.type) {
+    throw new Error("Please add name");
+  } else if (!req.body.industry) {
     res.status(400);
-    throw new Error("Please add a type field");
+    throw new Error("Please add industry");
+  } else if (!req.body.mobile) {
+    res.status(400);
+    throw new Error("Please add mobile");
   } else if (!req.body.location) {
     res.status(400);
-    throw new Error("Please add a location field");
-  } else if (!req.body.description) {
+    throw new Error("Please add location");
+  } else if (!req.body.stage) {
     res.status(400);
-    throw new Error("Please add a description field");
+    throw new Error("Please add stage");
   } else if (!req.body.expected_fund) {
     res.status(400);
-    throw new Error("Please add an expected fund field");
-  } else if (!req.body.enterprenuer) {
+    throw new Error("Please add an expected fund");
+  } else if (!req.body.enterpreneur) {
     res.status(400);
-    throw new Error("Please add enterprenuer");
+    throw new Error("Please add enterpreneur");
+  } else if (!req.body.investor_percentage) {
+    res.status(400);
+    throw new Error("Please add investor percentage");
   }
 
   const project = await Project.create({
     name: req.body.name,
-    type: req.body.type,
+    website: req.body.website,
     location: req.body.location,
-    short_description: req.body.short_description,
-    description: req.body.description,
+    mobile: req.body.mobile,
+    industry: req.body.industry,
+    stage: req.body.stage,
     expected_fund: req.body.expected_fund,
-    enterprenuer: req.body.enterprenuer,
+    raised_fund: req.body.raised_fund,
+    investor_percentage: req.body.investor_percentage,
+    enterpreneur: req.body.enterpreneur,
   });
 
   res.status(201).json({

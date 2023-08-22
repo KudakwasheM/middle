@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useRegisterMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
+import { GrFormClose } from "react-icons/gr";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -27,10 +28,10 @@ const Register = () => {
           navigate("/admin");
           break;
         case "Interprenuer":
-          navigate("/enterprenuer");
+          navigate("/enterpreneur");
           break;
         case "Investor":
-          navigate("/enterprenuer");
+          navigate("/enterpreneur");
           break;
         default:
           // navigate("/");
@@ -45,9 +46,11 @@ const Register = () => {
 
     if (password !== confirm_password) {
       toast.error("Passowrds do not match");
+      return;
     } else {
       if (!role) {
         toast.error("Please select role");
+        return;
       }
       try {
         const res = await register({
@@ -61,7 +64,7 @@ const Register = () => {
         console.log(res);
         // navigate("/");
       } catch (err) {
-        toast.error("Hello");
+        toast.error(err?.data?.message || err.error);
       }
     }
   };
@@ -69,9 +72,13 @@ const Register = () => {
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="flex flex-col border md:w-[400px] p-5">
+        <button onClick={() => navigate(-1)} className="self-end">
+          <GrFormClose size={25} />
+        </button>
         <h1 className="text-center text-[rgb(0,223,154)] text-4xl font-bold mb-3">
           Middle.
         </h1>
+        <ToastContainer />
         <p className="text-2xl text-center mb-3">Create an account</p>
         <form>
           <div className="flex justify-around mb-2">
@@ -79,7 +86,7 @@ const Register = () => {
               <input
                 type="radio"
                 name="role"
-                id="enterprenuer"
+                id="enterpreneur"
                 value="Enterprenuer"
                 onChange={(e) => setRole(e.target.value)}
               />

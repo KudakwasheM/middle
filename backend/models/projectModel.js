@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import Double from "@mongoosejs/double";
 
 const projectSchema = mongoose.Schema(
   {
@@ -8,7 +9,6 @@ const projectSchema = mongoose.Schema(
     },
     website: {
       type: String,
-      required: true,
     },
     location: {
       type: String,
@@ -24,18 +24,18 @@ const projectSchema = mongoose.Schema(
       required: true,
     },
     expected_fund: {
-      type: mongoose.Types.Decimal128,
+      type: Number,
       required: true,
     },
     raised_fund: {
-      type: mongoose.Types.Decimal128,
+      type: Number,
       default: 0,
     },
     investor_percentage: {
-      type: mongoose.Types.Decimal128,
+      type: Number,
       default: 0,
     },
-    enterprenuer: {
+    enterpreneur: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },

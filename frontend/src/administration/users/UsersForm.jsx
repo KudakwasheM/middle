@@ -25,6 +25,7 @@ const UsersForm = () => {
 
     if (password !== confirm_password) {
       toast.error("Passowrds do not match");
+      return;
     } else {
       try {
         const res = await setUser({

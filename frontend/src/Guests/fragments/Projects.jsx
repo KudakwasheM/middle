@@ -55,7 +55,7 @@ const Projects = () => {
             </div>
             <div className="mt-5">
               <Link
-                to="/innovations/id"
+                to="/proposals/id"
                 className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
               >
                 Find Out More
@@ -97,7 +97,7 @@ const Projects = () => {
             </div>
             <div className="mt-5">
               <Link
-                to="/innovations/id"
+                to="/proposals/id"
                 className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
               >
                 Find Out More
@@ -139,7 +139,7 @@ const Projects = () => {
             </div>
             <div className="mt-5">
               <Link
-                to="/innovations/id"
+                to="/proposals/id"
                 className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
               >
                 Find Out More
@@ -150,7 +150,7 @@ const Projects = () => {
       </div>
       <div className="text-center py-10">
         <p className="mb-5">
-          Browser enterprenuer ideas, startups from all over Zimbabwe
+          Browser enterpreneur ideas, startups from all over Zimbabwe
         </p>
         <Link className="text-blue-400 hover:underline">View more</Link>
       </div>

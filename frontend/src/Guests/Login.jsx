@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { GrFormClose } from "react-icons/gr";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,10 +26,10 @@ const Login = () => {
           navigate("/admin");
           break;
         case "Interprenuer":
-          navigate("/enterprenuer");
+          navigate("/enterpreneur");
           break;
         case "Investor":
-          navigate(-1);
+          navigate("/investor");
           break;
         default:
           navigate("/login");
@@ -50,9 +52,13 @@ const Login = () => {
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="flex flex-col border md:w-[400px] p-5">
+        <button onClick={() => navigate(-1)} className="self-end">
+          <GrFormClose size={25} />
+        </button>
         <h1 className="text-center text-[rgb(0,223,154)] text-4xl font-bold mb-5">
           Middle.
         </h1>
+        <ToastContainer />
         <p className="text-2xl text-center mb-3">Login into your account</p>
         <form className="flex flex-col">
           <div className="flex flex-col mb-2">

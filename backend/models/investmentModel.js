@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const investmetSchema = mongoose.Schema(
   {
     amount: {
-      type: mongoose.Types.Decimal128,
+      type: Number,
       required: true,
     },
     project_types: {

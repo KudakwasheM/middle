@@ -11,8 +11,8 @@ import ReactPaginate from "react-paginate";
 import SearchBar from "../components/SearchBar";
 
 const Users = () => {
-  const [search, setSearch] = useState("");
   const { data, isLoading, isSuccess, isError, error } = useGetAllUsersQuery();
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
 
