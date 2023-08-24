@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 import { useGetAllUsersQuery } from "../../slices/usersApiSlice";
 import ReactPaginate from "react-paginate";
 import SearchBar from "../components/SearchBar";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { getUsers } from "../../slices/usersSlice";
+import { InfinitySpin } from "react-loader-spinner";
 
 const Users = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllUsersQuery();
@@ -16,17 +20,18 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
 
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredUsers.length;
-    setItemOffset(newOffset);
-  };
-
   let usersList = null;
 
   if (isLoading) {
-    usersList = <p>...Loading</p>;
+    usersList = (
+      <div className="flex flex-col justify-center items-center">
+        <InfinitySpin width="200" color="#4fa94d" />
+        <p className="text-[#4fa94d] text-lg">Loading...</p>
+      </div>
+    );
   } else if (isSuccess) {
     const users = data.users;
+
     const filteredUsers = users.filter((user) => {
       // Specify your filter conditions here
       return search.toLowerCase() === ""
@@ -40,15 +45,20 @@ const Users = () => {
         : user.role.toLowerCase().includes(search);
     });
 
-    const itemsPerPage = 2;
+    const itemsPerPage = 4;
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = filteredUsers.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
 
+    const handlePageClick = (event) => {
+      const newOffset = (event.selected * itemsPerPage) % filteredUsers.length;
+      setItemOffset(newOffset);
+    };
+
     usersList = (
       <>
         {currentItems.length > 0 ? (
-          <div className="grid grid-cols-4 gap-5 text-center py-5">
+          <div className="grid grid-cols-4 gap-5 text-center py-3">
             {currentItems
               // .filter((user) => {
               //   return search.toLowerCase() === ""
@@ -61,7 +71,10 @@ const Users = () => {
               // })
               .map((user) => {
                 return (
-                  <div className="flex flex-col border rounded-lg bg-white p-5">
+                  <div
+                    className="flex flex-col border rounded-lg bg-white p-5 hover:shadow-xl"
+                    key={user._id}
+                  >
                     <div className="mx-auto">
                       <img
                         src=""
@@ -92,7 +105,7 @@ const Users = () => {
                           <p className="ml-2">Subscribed</p>
                         </div>
                       </div>
-                      <div className="flex justify-around  border-t pt-3">
+                      <div className="flex justify-around border-t pt-3 mt-3">
                         <AiOutlineEye
                           size={22}
                           title="View"
@@ -146,8 +159,8 @@ const Users = () => {
 
   useEffect(() => {}, []);
   return (
-    <div className="bg-white p-5 w-full">
-      <div className="flex justify-between items-center pb-5">
+    <div className="bg-white p-3 w-full">
+      <div className="flex justify-between items-center mb-3">
         <h2 className="text-3xl font-semibold">Users</h2>
         <Link
           to="/admin/users/add"
@@ -161,16 +174,12 @@ const Users = () => {
           />
         </Link>
       </div>
-      <div className="">
-        <form>
-          <input
-            type="text"
-            placeholder="Search for a user (name, email, username, role)"
-            className="w-full p-2 text-lg border rounded-lg"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
-      </div>
+      <input
+        type="text"
+        placeholder="Search for a user (name, email, username, role)"
+        className="w-full p-2 text-lg border rounded-lg"
+        onChange={(e) => setSearch(e.target.value)}
+      />
       {usersList}
     </div>
   );

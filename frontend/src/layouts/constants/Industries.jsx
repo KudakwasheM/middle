@@ -1,8 +1,8 @@
 export const industries = [
-  { name: "Farming", img_url: "" },
-  { name: "Mining", img_url: "" },
-  { name: "Software", img_url: "" },
-  { name: "Food", img_url: "" },
-  { name: "Education", img_url: "" },
-  { name: "Medicine", img_url: "" },
+  { value: "Farming", label: "Farming" },
+  { value: "Mining", label: "Mining" },
+  { value: "Software", label: "Software" },
+  { value: "Food", label: "Food" },
+  { value: "Education", label: "Education" },
+  { value: "Medicine", label: "Medicine" },
 ];

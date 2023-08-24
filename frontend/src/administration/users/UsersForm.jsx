@@ -81,7 +81,10 @@ const UsersForm = () => {
         </div>
         <div className="flex flex-col mb-2">
           <label htmlFor="">Role</label>
-          <select className="border p-2">
+          <select
+            className="border p-2"
+            onChange={(e) => setRole(e.target.value)}
+          >
             <option value="" selected disabled>
               -- Select role --
             </option>

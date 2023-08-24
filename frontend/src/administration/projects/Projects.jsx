@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { GoLocation } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useGetAllProjectsQuery } from "../../slices/projectsApiSlice";
-import { AiOutlineUserAdd } from "react-icons/ai";
+import {
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineEye,
+  AiOutlineUserAdd,
+} from "react-icons/ai";
+import { InfinitySpin } from "react-loader-spinner";
+import ReactPaginate from "react-paginate";
 
 const Projects = () => {
   const per2 = 80;
@@ -12,16 +19,17 @@ const Projects = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
 
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredUsers.length;
-    setItemOffset(newOffset);
-  };
-
   let projectsList = null;
   if (isLoading) {
-    projectsList = <p>...Loading</p>;
+    projectsList = (
+      <div className="flex flex-col justify-center items-center">
+        <InfinitySpin width="200" color="#4fa94d" />
+        <p className="text-[#4fa94d] text-lg">Loading...</p>
+      </div>
+    );
   } else if (isSuccess) {
     const projects = data.projects;
+    console.log(projects);
     const filteredProjects = projects.filter((project) => {
       // Specify your filter conditions here
       return search.toLowerCase() === ""
@@ -31,18 +39,24 @@ const Projects = () => {
         : project.location.toLowerCase().includes(search);
     });
 
-    const itemsPerPage = 2;
+    const itemsPerPage = 3;
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = filteredProjects.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(filteredProjects.length / itemsPerPage);
 
+    const handlePageClick = (event) => {
+      const newOffset =
+        (event.selected * itemsPerPage) % filteredProjects.length;
+      setItemOffset(newOffset);
+    };
+
     projectsList = (
       <>
         {currentItems.length > 0 ? (
-          <div className="grid grid-cols-3 gap-5 py-5">
+          <div className="grid grid-cols-3 gap-5 py-3">
             {currentItems.map((project) => {
               return (
-                <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)] hover:shadow-xl">
+                <div className="flex flex-col border rounded-lg hover:shadow-xl">
                   <div className="h-32">No Image</div>
                   <div className="w-full bg-slate-500 h-[3px]">
                     <div
@@ -79,13 +93,22 @@ const Projects = () => {
                         </h3>
                       </div>
                     </div>
-                    <div className="mt-5">
-                      <Link
-                        to={`/proposals/${project._id}`}
-                        className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
-                      >
-                        Find Out More
-                      </Link>
+                    <div className="flex justify-around  border-t pt-3 mt-3">
+                      <AiOutlineEye
+                        size={22}
+                        title="View"
+                        className="text-green-500"
+                      />
+                      <AiOutlineEdit
+                        size={22}
+                        title="Edit"
+                        className="text-sky-500"
+                      />
+                      <AiOutlineDelete
+                        size={22}
+                        title="Delete"
+                        className="text-red-500"
+                      />
                     </div>
                   </div>
                 </div>
@@ -97,12 +120,32 @@ const Projects = () => {
             No projects found
           </p>
         )}
+        <ReactPaginate
+          previousLabel={"← Prev "}
+          nextLabel={"Next →"}
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          containerClassName={
+            "flex justify-center items-center mb-1 text-lg gap-1 my-4"
+          }
+          previousLinkClassName={
+            "border px-2 py-2 rounded-lg font-semibold hover:bg-[rgb(0,223,154)] hover:border-[rgb(0,223,154)] hover:text-white"
+          }
+          nextLinkClassName={
+            "border px-2 py-2 rounded-lg font-semibold hover:bg-[rgb(0,223,154)] hover:border-[rgb(0,223,154)] hover:text-white"
+          }
+          pageLinkClassName="py-2 px-2 border rounded-lg font-semibold hover:bg-[rgb(0,223,154)] hover:border-[rgb(0,223,154)] hover:text-white"
+          disabledClassName={"pagination__link--disabled"}
+          activeLinkClassName={
+            "bg-[rgb(0,223,154)] text-white border-[rgb(0,223,154)]"
+          }
+        />
       </>
     );
   }
   return (
-    <div className="bg-white p-5 w-full">
-      <div className="flex justify-between items-center pb-5">
+    <div className="bg-white p-3 w-full">
+      <div className="flex justify-between items-center mb-3">
         <h2 className="text-3xl font-semibold">Proposals</h2>
         <Link
           to="/admin/projects/add"
@@ -116,16 +159,12 @@ const Projects = () => {
           />
         </Link>
       </div>
-      <div className="">
-        <form>
-          <input
-            type="text"
-            placeholder="Search for a user (name, email, username, role)"
-            className="w-full p-2 text-lg border rounded-lg"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
-      </div>
+      <input
+        type="text"
+        placeholder="Search for a user (name, email, username, role)"
+        className="w-full p-2 text-lg border rounded-lg"
+        onChange={(e) => setSearch(e.target.value)}
+      />
       {projectsList}
     </div>
   );

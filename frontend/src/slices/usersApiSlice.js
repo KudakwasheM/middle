@@ -6,6 +6,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     getAllUsers: builder.query({
       query: () => `${USERS_URL}`,
     }),
+    getEnterpreneurs: builder.query({
+      query: () => `${USERS_URL}/enterpreneur`,
+    }),
     setUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}`,
@@ -16,4 +19,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetAllUsersQuery, useSetUserMutation } = usersApiSlice;
+export const {
+  useGetAllUsersQuery,
+  useGetEnterpreneursQuery,
+  useSetUserMutation,
+} = usersApiSlice;

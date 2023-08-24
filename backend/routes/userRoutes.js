@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteUser,
+  getEnterpreneurs,
   getUser,
   getUsers,
   setUser,
@@ -11,6 +12,7 @@ import { admin, protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.route("/").get(protect, getUsers).post(protect, setUser);
+router.route("/enterpreneur").get(protect, getEnterpreneurs);
 router
   .route("/:id")
   .get(protect, getUser)

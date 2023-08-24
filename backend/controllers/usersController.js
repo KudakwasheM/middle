@@ -13,6 +13,18 @@ const getUsers = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get users
+// Route    Get /api/users
+// Access   Private
+const getEnterpreneurs = asyncHandler(async (req, res) => {
+  const users = await User.find({ role: "Enterpreneur" });
+
+  res.status(200).json({
+    message: "Users found successfully",
+    users: users,
+  });
+});
+
 // @desc    Get user
 // Route    Get /api/users/:id
 // Access   Private
@@ -127,4 +139,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { getUsers, getUser, setUser, updateUser, deleteUser };
+export { getUsers, getEnterpreneurs, getUser, setUser, updateUser, deleteUser };
