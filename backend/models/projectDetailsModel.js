@@ -10,16 +10,8 @@ const projectDetailsSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    market: {
-      type: String,
-      required: true,
-    },
     progress: {
       type: String,
-      required: true,
-    },
-    progress: {
-      type: [String],
     },
     advantages: {
       type: [String],

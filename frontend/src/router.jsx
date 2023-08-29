@@ -21,6 +21,7 @@ import Testimonials from "./Guests/Testimonials/Testimonials";
 import Projects from "./administration/projects/Projects";
 import ProjectForm from "./administration/projects/ProjectForm";
 import Investors from "./administration/investors/Investors";
+import User from "./administration/users/User";
 
 const router = createBrowserRouter([
   {
@@ -46,8 +47,9 @@ const router = createBrowserRouter([
       { path: "projects/add", element: <ProjectForm /> },
       { path: "investors", element: <Investors /> },
       { path: "users", element: <Users /> },
+      { path: "users/:id", element: <User /> },
       { path: "users/add", element: <UsersForm /> },
-      { path: "users/add/:id", element: <UsersForm /> },
+      { path: "users/edit/:id", element: <UsersForm /> },
     ],
   },
   {

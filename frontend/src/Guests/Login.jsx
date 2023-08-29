@@ -6,6 +6,7 @@ import { setCredentials } from "../slices/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { GrFormClose } from "react-icons/gr";
+import axiosClient from "../axiosClient";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,13 +42,15 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      navigate("/");
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
+    await axiosClient
+      .post("/login", { email, password })
+      .then((res) => {
+        dispatch(setCredentials(res.data));
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message || err.error);
+      });
   };
   return (
     <div className="h-screen w-screen flex items-center justify-center">

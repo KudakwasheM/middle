@@ -48,6 +48,17 @@ const getUser = asyncHandler(async (req, res) => {
 const setUser = asyncHandler(async (req, res) => {
   const { name, username, active, email, role, password } = req.body;
 
+  if (
+    req.body.name === "" ||
+    req.body.username === "" ||
+    req.body.role === "" ||
+    req.body.password === "" ||
+    req.body.email === ""
+  ) {
+    res.status(401);
+    throw new Error("Fill in all fields");
+  }
+
   const emailExist = await User.findOne({ email });
   const usernameExist = await User.findOne({ username });
 
@@ -89,13 +100,14 @@ const setUser = asyncHandler(async (req, res) => {
 // Route    Put /api/users/:id
 // Access   Private
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params._id);
-
+  const user = await User.findById(req.params.id);
   if (user) {
     user.name = req.body.name || user.name;
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.active = req.body.active || user.active;
+    user.role = req.body.role || user.role;
+    user.subscribed = req.body.subscribed || user.subscribed;
     // user.subscribed = req.body.subscribed || user.subscribed;
 
     if (req.body.password) {
@@ -105,12 +117,12 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.status(200).json({
-      _id: req.user._id,
-      name: req.user.name,
-      username: req.user.username,
-      email: req.user.email,
-      active: req.user.active,
-      role: req.user.role,
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      active: updatedUser.active,
+      role: updatedUser.role,
     });
   } else {
     res.status(404);

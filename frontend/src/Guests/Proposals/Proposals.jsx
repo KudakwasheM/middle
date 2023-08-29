@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { GoLocation } from "react-icons/go";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { useGetAllProjectsQuery } from "../../slices/projectsApiSlice";
 
-const Proposals = ({ props }) => {
+const Proposals = () => {
   const per1 = 80;
-  const { data } = props;
+  const { data, isLoading, isSuccess, isError } = useGetAllProjectsQuery();
   const itemsPerPage = 12;
   const [itemOffset, setItemOffset] = useState(0);
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = data.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(data.length / itemsPerPage);
+  // const endOffset = itemOffset + itemsPerPage;
+  // const currentItems = data.slice(itemOffset, endOffset);
+  // const pageCount = Math.ceil(data.length / itemsPerPage);
 
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % data.length;
-    setItemOffset(newOffset);
-  };
+  // const handlePageClick = (event) => {
+  //   const newOffset = (event.selected * itemsPerPage) % data.length;
+  //   setItemOffset(newOffset);
+  // };
   return (
     <div>
       <div className="sub-hero w-full">
@@ -327,7 +328,7 @@ const Proposals = ({ props }) => {
             </div>
           </div>
         </div>
-        <>
+        {/* <>
           <ReactPaginate
             breakLabel="..."
             nextLabel="next >"
@@ -337,7 +338,7 @@ const Proposals = ({ props }) => {
             previousLabel="< previous"
             renderOnZeroPageCount={null}
           />
-        </>
+        </> */}
       </div>
     </div>
   );

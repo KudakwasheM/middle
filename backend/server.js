@@ -9,6 +9,8 @@ import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import fundRoutes from "./routes/fundRoutes.js";
 import investmentRoutes from "./routes/investmentRoutes.js";
+import projectDetailRoutes from "./routes/projectDetailRoutes.js";
+import teamMemberRoutes from "./routes/teamMemberRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 
 const port = process.env.PORT || 5000;
@@ -31,6 +33,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/funds", fundRoutes);
 app.use("/api/investments", investmentRoutes);
+app.use("/api/details", projectDetailRoutes);
+app.use("/api/members", teamMemberRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
