@@ -64,7 +64,7 @@ const Projects = () => {
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-3xl font-semibold">Proposals</h2>
         <Link
-          to="/admin/projects/add"
+          to="/admin/projects/create"
           className="flex items-center bg-green-400 font-semibold py-2 px-3 text-white"
         >
           Add Project
@@ -141,21 +141,27 @@ const Projects = () => {
                             </div>
                           </div>
                           <div className="flex justify-around  border-t pt-3 mt-3">
-                            <AiOutlineEye
-                              size={22}
-                              title="View"
-                              className="text-green-500"
-                            />
-                            <AiOutlineEdit
-                              size={22}
-                              title="Edit"
-                              className="text-sky-500"
-                            />
-                            <AiOutlineDelete
-                              size={22}
-                              title="Delete"
-                              className="text-red-500"
-                            />
+                            <Link to={`/admin/projects/${project._id}`}>
+                              <AiOutlineEye
+                                size={22}
+                                title="View"
+                                className="text-green-500"
+                              />
+                            </Link>
+                            <Link to={`/admin/projects/edit/${project._id}`}>
+                              <AiOutlineEdit
+                                size={22}
+                                title="Edit"
+                                className="text-sky-500"
+                              />
+                            </Link>
+                            <Link>
+                              <AiOutlineDelete
+                                size={22}
+                                title="Delete"
+                                className="text-red-500"
+                              />
+                            </Link>
                           </div>
                         </div>
                       </div>

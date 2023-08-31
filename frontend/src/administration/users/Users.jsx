@@ -70,7 +70,7 @@ const Users = () => {
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-3xl font-semibold">Users</h2>
         <Link
-          to="/admin/users/add"
+          to="/admin/users/create"
           className="flex items-center bg-green-400 font-semibold py-2 px-3 text-white"
         >
           Add User

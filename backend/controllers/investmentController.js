@@ -1,6 +1,9 @@
 import asyncHandler from "express-async-handler";
 import Investment from "../models/investmentModel.js";
 
+// @desc    Get investments
+// Route    Get /api/investments
+// Access   Private
 const getInvestments = asyncHandler(async (req, res) => {
   const investments = await Investment.find();
 
@@ -10,6 +13,9 @@ const getInvestments = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get investments
+// Route    Get /api/investments
+// Access   Private
 const setInvestment = asyncHandler(async (req, res) => {
   if (!req.body.amount) {
     res.status(400);
@@ -21,6 +27,7 @@ const setInvestment = asyncHandler(async (req, res) => {
 
   const investment = await Investment.find({
     name: req.body.amount,
+    remaining: req.body.amount,
     investor: req.body.investor,
     project_types: req.body.project_types,
   });
@@ -53,15 +60,18 @@ const updateInvestment = asyncHandler(async (req, res) => {
     throw new Error("Investment not found");
   }
 
-  const updatedInvestment = await Investment.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
+  investment.amount = req.body.amount || investment.amount;
+  investment;
+  investment.remaining = req.body.remaining || investment.remaining;
+  investment.project_types = req.body.project_types || investment.project_types;
+
+  const updatedInvestment = await investment.save();
 
   res.status(200).json({
-    investment: updatedInvestment,
-    message: "Investment updated successfully",
+    id: updatedInvestment._id,
+    amount: updateInvestment.amount,
+    remaining: updateInvestment.remaining,
+    project_types: updateInvestment.project_types,
   });
 });
 

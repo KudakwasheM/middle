@@ -108,7 +108,6 @@ const updateUser = asyncHandler(async (req, res) => {
     user.active = req.body.active || user.active;
     user.role = req.body.role || user.role;
     user.subscribed = req.body.subscribed || user.subscribed;
-    // user.subscribed = req.body.subscribed || user.subscribed;
 
     if (req.body.password) {
       user.password = req.body.password;
