@@ -28,13 +28,13 @@ const Users = () => {
     // Specify your filter conditions here
     return search.toLowerCase() === ""
       ? user
-      : user.name.toLowerCase().includes(search)
+      : user.name.toLowerCase().includes(search.toLowerCase())
       ? user
-      : user.email.toLowerCase().includes(search)
+      : user.email.toLowerCase().includes(search.toLowerCase())
       ? user
-      : user.username.toLowerCase().includes(search)
+      : user.username.toLowerCase().includes(search.toLowerCase())
       ? user
-      : user.role.toLowerCase().includes(search);
+      : user.role.toLowerCase().includes(search.toLowerCase());
   });
 
   const itemsPerPage = 4;

@@ -26,9 +26,9 @@ const Projects = () => {
     // Specify your filter conditions here
     return search.toLowerCase() === ""
       ? project
-      : project.name.toLowerCase().includes(search)
+      : project.name.toLowerCase().includes(search.toLowerCase())
       ? project
-      : project.location.toLowerCase().includes(search);
+      : project.location.toLowerCase().includes(search.toLowerCase());
   });
 
   const itemsPerPage = 3;
