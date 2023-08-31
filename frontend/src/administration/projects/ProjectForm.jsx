@@ -131,7 +131,7 @@ const ProjectForm = () => {
     if (id) {
       setLoadProject(true);
       await axiosClient
-        .post(`/projects/${id}`, proj)
+        .put(`/projects/${id}`, proj)
         .then((res) => {
           setLoadProject(false);
           console.log(res);
@@ -156,16 +156,29 @@ const ProjectForm = () => {
 
   const saveDetails = async (e) => {
     e.preventDefault();
-    setLoadDetails(true);
-    await axiosClient
-      .post("/details", details)
-      .then((res) => {
-        setLoadDetails(false);
-        console.log(res);
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data?.message);
-      });
+    if (id) {
+      setLoadDetails(true);
+      await axiosClient
+        .put("/details", details)
+        .then((res) => {
+          setLoadDetails(false);
+          console.log(res);
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+        });
+    } else {
+      setLoadDetails(true);
+      await axiosClient
+        .post("/details", details)
+        .then((res) => {
+          setLoadDetails(false);
+          console.log(res);
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+        });
+    }
   };
 
   const saveMember = async (e) => {
