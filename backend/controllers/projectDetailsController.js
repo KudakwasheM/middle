@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import ProjectDetails from "../models/projectDetailsModel.js";
+import Project from "../models/projectModel.js";
 
 // @desc    Get detail on project
 // Route    Get /api/details/project/:id
@@ -65,28 +66,43 @@ const setDetail = asyncHandler(async (req, res) => {
     throw new Error("Details for this proposal already exist");
   }
 
-  const detail = await ProjectDetails.create({
-    short_summary,
-    description,
-    progress,
-    advantages,
-    deal,
-    project_id,
-  });
-
-  if (detail) {
-    res.status(201).json({
-      short_summary: detail.short_summary,
-      description: detail.description,
-      progress: detail.progress,
-      email: detail.email,
-      advantages: detail.advantages,
-      deal: detail.deal,
-      project_id: detail.project_id,
+  try {
+    const detail = await ProjectDetails.create({
+      short_summary,
+      description,
+      progress,
+      advantages,
+      deal,
+      project_id,
     });
-  } else {
-    res.status(400);
-    throw new Error("Invalid project details");
+
+    if (detail) {
+      const project = await Project.findByIdAndUpdate(
+        req.body.project_id,
+        {
+          $push: { details: detail._id },
+        },
+        { new: true }
+      );
+
+      if (project) {
+        res.status(201).json({
+          id: detail._id,
+          short_summary: detail.short_summary,
+          description: detail.description,
+          progress: detail.progress,
+          email: detail.email,
+          advantages: detail.advantages,
+          deal: detail.deal,
+          project_id: detail.project_id,
+        });
+      }
+    }
+  } catch (err) {
+    await ProjectDetails.deleteOne();
+
+    res.status(401);
+    throw new Error("Failed to add details");
   }
 });
 

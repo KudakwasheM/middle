@@ -66,7 +66,7 @@ const setProject = asyncHandler(async (req, res) => {
 //route     Get api/projects/:id
 //access    public
 const getProject = asyncHandler(async (req, res) => {
-  const project = await Project.findById(req.params.id);
+  const project = await Project.findById(req.params.id).populate("details");
 
   if (!project) {
     res.status(400);
