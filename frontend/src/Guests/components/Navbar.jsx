@@ -12,9 +12,11 @@ const Navbar = ({ route }) => {
     <div className="w-full bg-white z-10 sticky top-0 shadow-md">
       <div className="flex justify-between items-center h-20 max-w-[1200px] mx-auto px-4">
         {/* <div className="flex justify-between items-center h-24 max-w-[1500px] mx-auto px-4 shadow-lg z-50 fixed w-full top-0"> */}
-        <h1 className="w-full text-3xl font-bold text-[rgb(0,223,154)]">
-          Middle.
-        </h1>
+        <Link to="/">
+          <h1 className="w-full text-3xl font-bold text-[rgb(0,223,154)]">
+            Middle.
+          </h1>
+        </Link>
         <ul className="hidden md:flex items-center justify-between">
           <li className="hover:text-[rgb(0,223,154)] mr-5">
             <NavLink

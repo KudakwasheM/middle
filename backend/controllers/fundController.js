@@ -113,26 +113,26 @@ const deleteFund = asyncHandler(async (req, res) => {
     throw new Error("Fund not found");
   }
 
-  const fundProject = await Project.find(fund.project);
-
-  if (fundProject) {
-    try {
+  try {
+    const fundProject = await Project.find(fund.project);
+    if (fundProject) {
       const newRaised = (fundProject.raised_fund -= fund.amount);
       fundProject.raised_fund = newRaised;
       await fundProject.save();
-    } catch (error) {
-      console.error(error);
     }
+
+    await Fund.deleteOne();
+
+    const funds = await Fund.find();
+    res.status(200).json({
+      id: req.params.id,
+      funds: funds,
+      message: "Fund removed successfully",
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Failed to remove fund");
   }
-
-  await Fund.deleteOne();
-
-  const funds = await Fund.find();
-  res.status(200).json({
-    id: req.params.id,
-    funds: funds,
-    message: "Fund removed successfully",
-  });
 });
 
 export { getFunds, setFund, getFund, updateFund, deleteFund };

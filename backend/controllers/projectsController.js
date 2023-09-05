@@ -5,7 +5,7 @@ import Project from "../models/projectModel.js";
 // Router       Get /api/projects
 // Access       Public
 const getProjects = asyncHandler(async (req, res) => {
-  const projects = await Project.find();
+  const projects = await Project.find().populate("details");
 
   res.status(200).json({
     projects: projects,

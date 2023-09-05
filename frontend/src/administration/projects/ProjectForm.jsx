@@ -7,7 +7,7 @@ import { addProject } from "../../slices/projectsSlice";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import { industries } from "../../layouts/constants/Industries";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useGetEnterpreneursQuery } from "../../slices/usersApiSlice";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import axiosClient from "../../axiosClient";
@@ -16,6 +16,8 @@ import { set } from "@mongoosejs/double";
 
 const ProjectForm = () => {
   const { id } = useParams();
+  const [detailsId, setDetailsId] = useState("");
+  const [memberIds, setMemberIds] = useState();
   const [loading, setLoading] = useState(false);
   const [proj, setProj] = useState({
     name: "",
@@ -73,17 +75,15 @@ const ProjectForm = () => {
     await axiosClient
       .get(`/projects/${id}`)
       .then((res) => {
+        setLoading(false);
         setProj(res?.data?.project);
+        const retrievedProject = res?.data?.project;
+        const details = retrievedProject.details[0];
+        setDetails(details);
+        setDetailsId(details._id);
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.message);
-      });
-    await axiosClient
-      .get(`/details/project/${id}`)
-      .then((res) => {
-        setDetails(res?.data?.detail);
-      })
-      .catch((err) => {
+        setLoading(false);
         toast.error(err?.response?.data?.message);
       });
     await axiosClient
@@ -93,6 +93,7 @@ const ProjectForm = () => {
         setTeamMember(res?.data?.members);
       })
       .catch((err) => {
+        setLoading(false);
         toast.error(err?.response?.data?.message);
       });
   };
@@ -100,17 +101,23 @@ const ProjectForm = () => {
   const dataz = [];
   const getEnterpreneurs = async () => {
     setLoading(true);
-    await axiosClient.get("/users/enterpreneur").then((res) => {
-      setLoading(false);
-      setEnterpreneurs(res?.data?.users);
-      const users = res?.data?.users;
-      for (let i = 0; i < users.length; i++) {
-        const nigga = { value: users[i]._id, label: users[i].name };
-        dataz.push(nigga);
-      }
+    await axiosClient
+      .get("/users/enterpreneur")
+      .then((res) => {
+        setLoading(false);
+        setEnterpreneurs(res?.data?.users);
+        const users = res?.data?.users;
+        for (let i = 0; i < users.length; i++) {
+          const nigga = { value: users[i]._id, label: users[i].name };
+          dataz.push(nigga);
+        }
 
-      setData(dataz);
-    });
+        setData(dataz);
+      })
+      .catch((err) => {
+        setLoading(false);
+        toast.error(err?.response?.message);
+      });
   };
 
   // const setLoad = () => {
@@ -137,6 +144,7 @@ const ProjectForm = () => {
           console.log(res);
         })
         .catch((err) => {
+          setLoadProject(false);
           toast.error(err?.response?.data?.message);
         });
     } else {
@@ -149,6 +157,7 @@ const ProjectForm = () => {
           toast.error(res?.data?.message);
         })
         .catch((err) => {
+          setLoadProject(false);
           toast.error(err?.response?.data?.message);
         });
     }
@@ -156,26 +165,30 @@ const ProjectForm = () => {
 
   const saveDetails = async (e) => {
     e.preventDefault();
-    if (id) {
+    console.log(detailsId);
+    if (detailsId) {
+      console.log("Muno");
       setLoadDetails(true);
       await axiosClient
-        .put("/details", details)
+        .put(`/details/${detailsId}`, details)
         .then((res) => {
           setLoadDetails(false);
           console.log(res);
         })
         .catch((err) => {
+          setLoadDetails(false);
           toast.error(err?.response?.data?.message);
         });
     } else {
       setLoadDetails(true);
       await axiosClient
-        .post("/details", details)
+        .put(`/details${detailsId}`, details)
         .then((res) => {
           setLoadDetails(false);
           console.log(res);
         })
         .catch((err) => {
+          setLoadDetails(false);
           toast.error(err?.response?.data?.message);
         });
     }
@@ -191,6 +204,7 @@ const ProjectForm = () => {
         console.log(res);
       })
       .catch((err) => {
+        setLoadMember(false);
         toast.error(err?.response?.data?.message);
       });
   };
@@ -388,6 +402,7 @@ const ProjectForm = () => {
                     <label htmlFor="">Short Description</label>
                     <textarea
                       className="border p-2"
+                      value={details.short_summary}
                       placeholder="Enter your project name"
                       onChange={(e) =>
                         setDetails({
@@ -404,6 +419,7 @@ const ProjectForm = () => {
                     <label htmlFor="">Full Description</label>
                     <textarea
                       className="border p-2"
+                      value={details.description}
                       placeholder="Enter your project name"
                       onChange={(e) =>
                         setDetails({ ...details, description: e.target.value })
@@ -417,6 +433,7 @@ const ProjectForm = () => {
                     <label htmlFor="">Progress</label>
                     <textarea
                       className="border p-2"
+                      value={details.progress}
                       placeholder="Enter your project name"
                       onChange={(e) =>
                         setDetails({ ...details, progress: e.target.value })
@@ -429,25 +446,29 @@ const ProjectForm = () => {
 
                   <div className="flex flex-col mb-2">
                     <label htmlFor="">Deal</label>
-                    <input
-                      type="number"
+                    <textarea
                       className="border p-2"
-                      placeholder="Enter your text"
+                      value={details.deal}
+                      placeholder="Enter your deal"
                       onChange={(e) =>
                         setDetails({ ...details, deal: e.target.value })
                       }
+                      id=""
+                      // cols="30"
+                      rows="5"
+                    ></textarea>
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <label htmlFor="">Advantage</label>
+                    <input
+                      className="border p-2"
+                      placeholder="Enter your deal"
+                      onChange={(e) =>
+                        setDetails({ ...details, advantages: e.target.value })
+                      }
                     />
                   </div>
-                  {/* <div className="flex flex-col mb-2">
-                  <label htmlFor="">Stage</label>
-                  <input
-                    type="text"
-                    className="border p-2"
-                    placeholder="Enter your text"
-                    onChange={(e) => setStage(e.target.value)}
-                  />
-                </div> */}
-                  {/* {usersSelect} */}
+
                   <div className="">
                     <button
                       type="submit"

@@ -44,6 +44,18 @@ const projectSchema = mongoose.Schema(
         ref: "ProjectDetails",
       },
     ],
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TeamMember",
+      },
+    ],
+    funds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Fund",
+      },
+    ],
   },
   {
     timestamps: true,

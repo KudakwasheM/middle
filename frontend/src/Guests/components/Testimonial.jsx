@@ -23,8 +23,8 @@ const Testimonial = ({ slides }) => {
           alt=""
           className="h-24 w-24 rounded-full p-1 border-2 border-[rgb(0,223,154)] mx-auto mb-5"
         />
-        <h2 className="text-xl mb-5">{slides[currentIndex].title}</h2>
-        <p className="">{slides[currentIndex].text}</p>
+        <h2 className="text-xl mb-5">{slides[currentIndex].name}</h2>
+        <p className="">{slides[currentIndex].testimonial}</p>
       </div>
     </div>
   );

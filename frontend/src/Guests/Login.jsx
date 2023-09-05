@@ -11,6 +11,7 @@ import axiosClient from "../axiosClient";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,14 +42,16 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     await axiosClient
       .post("/login", { email, password })
       .then((res) => {
+        setLoading(false);
         dispatch(setCredentials(res.data));
         navigate("/");
       })
       .catch((err) => {
+        setLoading(false);
         toast.error(err?.response?.data?.message || err.error);
       });
   };

@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import TeamMember from "../models/teamMember.js";
+import Project from "../models/projectModel.js";
 
 // @desc    Get members on project
 // Route    Get /api/members/project/:id
@@ -55,23 +56,36 @@ const setMember = asyncHandler(async (req, res) => {
     throw new Error("Please add project");
   }
 
-  const member = await TeamMember.create({
-    name,
-    position,
-    description,
-    project_id,
-  });
-
-  if (member) {
-    res.status(201).json({
-      name: member.name,
-      position: member.position,
-      description: member.description,
-      project_id: member.project_id,
+  try {
+    const member = await TeamMember.create({
+      name,
+      position,
+      description,
+      project_id,
     });
-  } else {
+
+    if (member) {
+      const project = await Project.findByIdAndUpdate(
+        req.body.project_id,
+        {
+          $push: { members: member._id },
+        },
+        { new: true }
+      );
+
+      if (project) {
+        res.status(201).json({
+          name: member.name,
+          position: member.position,
+          description: member.description,
+          project_id: member.project_id,
+        });
+      }
+    }
+  } catch (err) {
     res.status(400);
-    throw new Error("Invalid project details");
+    await TeamMember.deleteOne();
+    throw new Error("Failed to add member");
   }
 });
 
