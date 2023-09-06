@@ -38,12 +38,10 @@ const projectSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    details: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ProjectDetails",
-      },
-    ],
+    details: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProjectDetails",
+    },
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,

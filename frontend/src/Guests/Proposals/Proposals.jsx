@@ -66,7 +66,7 @@ const Proposals = () => {
         <div className="lg:w-[1200px] grid grid-cols-3 gap-5 mx-auto px-5 lg:px-24 py-10">
           {currentItems.map((project) => {
             return (
-              <div className="flex flex-col border rounded-lg bg-[rgba(0,223,154,0.05)] hover:shadow-lg">
+              <div className="flex flex-col border rounded-lg shadow-md hover:shadow-2xl">
                 <div className="h-32">No Image</div>
                 <div className="w-full bg-slate-500 h-[3px]">
                   <div
@@ -84,14 +84,14 @@ const Proposals = () => {
                     <GoLocation size={18} className="text-blue-500" />
                     <span className="ml-1">{project.location}</span>
                   </p>
-                  {project.details.map((d) => {
-                    return (
-                      <p className="text-gray-700">
-                        {d.short_summary.split(" ").splice(0, 50).join(" ")}
-                        ...
-                      </p>
-                    );
-                  })}
+
+                  <p className="text-gray-700">
+                    {project.details.short_summary
+                      .split(" ")
+                      .splice(0, 50)
+                      .join(" ")}
+                    ...
+                  </p>
                   <div className="flex mt-5 gap-10">
                     <div className="flex flex-col">
                       <p className="text-sm">Target</p>

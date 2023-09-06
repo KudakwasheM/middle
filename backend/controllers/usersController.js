@@ -35,15 +35,18 @@ const getEnterpreneurs = asyncHandler(async (req, res) => {
 // Access   Private
 const getInvestors = asyncHandler(async (req, res) => {
   try {
-    const users = await User.find({ role: "Investor" });
+    const users = await User.find({ role: "Investor" }).populate("details");
+    console.log(users);
 
     res.status(200).json({
       message: "Investors found successfully",
       users: users,
     });
   } catch (error) {
-    res.status(400);
-    throw new Error("Failed to get enterpreneurs");
+    res.status(400).json({
+      error: error,
+    });
+    // throw new Error("Failed to get enterpreneurs");
   }
 });
 

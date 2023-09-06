@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Testimonial = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  console.log(slides);
   const slideTestimonial = () => {
     setTimeout(() => {
       const isLast = currentIndex === slides.length - 1;
@@ -24,7 +24,10 @@ const Testimonial = ({ slides }) => {
           className="h-24 w-24 rounded-full p-1 border-2 border-[rgb(0,223,154)] mx-auto mb-5"
         />
         <h2 className="text-xl mb-5">{slides[currentIndex].name}</h2>
-        <p className="">{slides[currentIndex].testimonial}</p>
+        <p className="">
+          {slides[currentIndex].testimonial.split(" ").splice(0, 50).join(" ")}
+          ...
+        </p>
       </div>
     </div>
   );

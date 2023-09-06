@@ -52,7 +52,8 @@ const Investors = () => {
                     <div className="mt-5">
                       <h2 className="font-semibold mb-2">{investor.name}</h2>
                       <div className="bg-[rgba(0,223,154,0.07)] font-semibold rounded-full my-2 p-2">
-                        US$ 1,000 - US$5,000
+                        US${investor.details.minimum} - US$
+                        {investor.details.maximum}
                       </div>
                       <p className="text-gray-700">
                         Lorem ipsum dolor sit, amet consectetur adipisicing
@@ -61,9 +62,12 @@ const Investors = () => {
                       </p>
 
                       <div className="mt-5">
-                        <button className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded">
+                        <Link
+                          to={`/investors/${investor._id}`}
+                          className="bg-[rgba(0,223,154,0.75)] hover:bg-[rgba(0,223,154,1)] py-2 px-3 text-white text-sm rounded"
+                        >
                           Get in touch
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

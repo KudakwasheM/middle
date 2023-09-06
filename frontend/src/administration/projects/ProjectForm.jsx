@@ -78,7 +78,7 @@ const ProjectForm = () => {
         setLoading(false);
         setProj(res?.data?.project);
         const retrievedProject = res?.data?.project;
-        const details = retrievedProject.details[0];
+        const details = retrievedProject.details;
         setDetails(details);
         setDetailsId(details._id);
       })

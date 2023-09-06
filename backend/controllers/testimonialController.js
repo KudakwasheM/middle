@@ -53,16 +53,16 @@ const setTestimonial = asyncHandler(async (req, res) => {
     throw new Error("Fill in all fields");
   }
 
-  const Testimonial = await Testimonial.create({
+  const newTestimonial = await Testimonial.create({
     name,
     testimonial,
   });
 
-  if (testimonial) {
+  if (newTestimonial) {
     res.status(201).json({
-      _id: testimonial._id,
-      name: testimonial.name,
-      testimonial: testimonial.testimonial,
+      _id: newTestimonial._id,
+      name: newTestimonial.name,
+      testimonial: newTestimonial.testimonial,
     });
   } else {
     res.status(400);

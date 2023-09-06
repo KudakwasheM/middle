@@ -9,7 +9,7 @@ import { InfinitySpin } from "react-loader-spinner";
 const Proposal = () => {
   const { id } = useParams();
   const [project, setProject] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getProject = async () => {
     setLoading(true);
@@ -33,7 +33,7 @@ const Proposal = () => {
   return (
     <div className="w-full">
       {loading ? (
-        <div className="flex flex-col justify-center items-center my-10">
+        <div className="flex flex-col justify-center items-center my-10 h-[90vh]">
           <InfinitySpin width="200" color="#4fa94d" />
           <p className="text-[#4fa94d] text-lg">Loading...</p>
         </div>
@@ -63,17 +63,7 @@ const Proposal = () => {
                 <div className="py-10 px-5 grid grid-cols-3 gap-5">
                   <div className="col-span-2">
                     <h1 className="text-2xl">Short Description</h1>
-                    {project.details ? (
-                      <>
-                        {project.details.map((d) => {
-                          return (
-                            <p className="text-gray-700">{d.short_summary}</p>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <></>
-                    )}
+                    <p>{project.details.short_summary}</p>
                   </div>
                   <div className="col-span-1">
                     <h1 className="text-2xl">Overview</h1>
@@ -110,36 +100,30 @@ const Proposal = () => {
               </TabPanel>
               <TabPanel>
                 <div className="grid grid-cols-4">
-                  {project.details && (
-                    <>
-                      {project.details.map((d) => {
-                        return (
-                          <div className="col-span-3">
-                            <div className="mb-3">
-                              <h1 className="text-2xl">The Business</h1>
-                              <p className="text-gray-700">{d.description}</p>
-                            </div>
-                            <div className="mb-3">
-                              <h1 className="text-2xl">Project Advantages</h1>
-                              {d.advantages ? (
-                                <>
-                                  {d.advantages.map((a) => {
-                                    return <p className="text-gray-700">{a}</p>;
-                                  })}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
-                            <div className="mb-3">
-                              <h1 className="text-2xl">The Deal</h1>
-                              <p className="text-gray-700">{d.deal}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
+                  <div className="col-span-3">
+                    <div className="mb-3">
+                      <h1 className="text-2xl">The Business</h1>
+                      <p className="text-gray-700">
+                        {project.details.description}
+                      </p>
+                    </div>
+                    <div className="mb-3">
+                      <h1 className="text-2xl">Project Advantages</h1>
+                      {project.details.advantages ? (
+                        <>
+                          {project.details.advantages.map((a) => {
+                            return <p className="text-gray-700">{a}</p>;
+                          })}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <h1 className="text-2xl">The Deal</h1>
+                      <p className="text-gray-700">{project.details.deal}</p>
+                    </div>
+                  </div>
                 </div>
               </TabPanel>
               <TabPanel>

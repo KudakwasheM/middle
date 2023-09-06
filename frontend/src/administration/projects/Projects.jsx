@@ -120,13 +120,9 @@ const Projects = () => {
                               <GoLocation size={18} className="text-blue-500" />
                               <span className="ml-1">{project.location}</span>
                             </p>
-
                             <p className="text-gray-700">
-                              {project.details[0].short_summary}
+                              {project.details.short_summary}
                             </p>
-                            {/* {project.details.map((d) => {
-                            <p className="text-gray-700">{d.short_summary}</p>;
-                          })} */}
                             <div className="flex mt-5 gap-10">
                               <div className="flex flex-col">
                                 <p className="text-sm">Target</p>
