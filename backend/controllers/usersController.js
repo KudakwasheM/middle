@@ -14,15 +14,37 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get users
-// Route    Get /api/users
+// Route    Get /api/users/enterpreneur
 // Access   Private
 const getEnterpreneurs = asyncHandler(async (req, res) => {
-  const users = await User.find({ role: "Enterpreneur" });
+  try {
+    const users = await User.find({ role: "Enterpreneur" });
 
-  res.status(200).json({
-    message: "Users found successfully",
-    users: users,
-  });
+    res.status(200).json({
+      message: "Enterpreneurs found successfully",
+      users: users,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Failed to get enterpreneurs");
+  }
+});
+
+// @desc    Get users
+// Route    Get /api/users/investors
+// Access   Private
+const getInvestors = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find({ role: "Investor" });
+
+    res.status(200).json({
+      message: "Investors found successfully",
+      users: users,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Failed to get enterpreneurs");
+  }
 });
 
 // @desc    Get user
@@ -150,4 +172,12 @@ const deleteUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { getUsers, getEnterpreneurs, getUser, setUser, updateUser, deleteUser };
+export {
+  getUsers,
+  getEnterpreneurs,
+  getInvestors,
+  getUser,
+  setUser,
+  updateUser,
+  deleteUser,
+};

@@ -33,6 +33,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    details: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "InvestorDetails",
+    },
   },
   {
     timestamps: true,
