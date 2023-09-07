@@ -6,33 +6,39 @@ import User from "../models/userModel.js";
 //route     POST /api/login
 //@access   Public
 const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  if (req.body.email === "" || req.body.password === "") {
-    res.status(401);
-    throw new Error("Fill in all fields");
-  }
+    if (req.body.email === "" || req.body.password === "") {
+      res.status(401);
+      throw new Error("Fill in all fields");
+    }
 
-  const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-  if (!user.active) {
-    res.status(401);
-    throw new Error("User not active");
-  }
+    if (!user.active) {
+      res.status(401);
+      throw new Error("User not active");
+    }
 
-  if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      username: user.username,
-      active: user.active,
-      role: user.role,
+    if (user && (await user.matchPassword(password))) {
+      generateToken(res, user._id);
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        active: user.active,
+        role: user.role,
+      });
+    } else {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
+  } catch (err) {
+    res.status(500).json({
+      error: err,
     });
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
   }
 });
 
