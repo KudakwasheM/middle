@@ -5,42 +5,79 @@ import User from "../models/userModel.js";
 //@desc     Auth user/set token
 //route     POST /api/login
 //@access   Public
-const login = asyncHandler(async (req, res) => {
-  try {
-    const { email, password } = req.body;
+const login = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
 
-    if (req.body.email === "" || req.body.password === "") {
+  try {
+    if (!email || !password) {
       res.status(401);
-      throw new Error("Fill in all fields");
+      throw new Error("Please provide both email and password");
     }
 
     const user = await User.findOne({ email });
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
 
     if (!user.active) {
       res.status(401);
       throw new Error("User not active");
     }
 
-    if (user && (await user.matchPassword(password))) {
-      generateToken(res, user._id);
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        username: user.username,
-        active: user.active,
-        role: user.role,
-      });
-    } else {
+    const isPasswordMatch = await user.matchPassword(password);
+
+    if (!isPasswordMatch) {
       res.status(401);
       throw new Error("Invalid email or password");
     }
-  } catch (err) {
-    res.status(500).json({
-      error: err,
+
+    generateToken(res, user._id);
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      active: user.active,
+      role: user.role,
     });
+  } catch (err) {
+    next(err);
   }
 });
+
+// const login = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (req.body.email === "" || req.body.password === "") {
+//     res.status(401);
+//     throw new Error("Fill in all fields");
+//   }
+
+//   const user = await User.findOne({ email });
+
+//   if (!user.active) {
+//     res.status(401);
+//     throw new Error("User not active");
+//   }
+
+//   if (user && (await user.matchPassword(password))) {
+//     generateToken(res, user._id);
+//     res.status(201).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       username: user.username,
+//       active: user.active,
+//       role: user.role,
+//     });
+//   } else {
+//     res.status(401);
+//     throw new Error("Invalid email or password");
+//   }
+// });
 
 //@desc     Register new user
 //route     POST /api/register
