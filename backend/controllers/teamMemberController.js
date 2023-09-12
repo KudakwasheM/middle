@@ -42,16 +42,16 @@ const getMember = asyncHandler(async (req, res) => {
 const setMember = asyncHandler(async (req, res) => {
   const { name, position, description, project_id } = req.body;
 
-  if (req.body.name === "") {
+  if (!name) {
     res.status(401);
     throw new Error("Please add name");
-  } else if (req.body.position === "") {
+  } else if (!position) {
     res.status(401);
     throw new Error("Please add position");
-  } else if (req.body.description === "") {
+  } else if (!description) {
     res.status(401);
     throw new Error("Please add description");
-  } else if (req.body.project_id === "") {
+  } else if (!project_id) {
     res.status(401);
     throw new Error("Please add project");
   }
@@ -80,6 +80,8 @@ const setMember = asyncHandler(async (req, res) => {
           description: member.description,
           project_id: member.project_id,
         });
+      } else {
+        throw new Error("Failed to update project with member");
       }
     }
   } catch (err) {

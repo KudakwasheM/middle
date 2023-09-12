@@ -36,7 +36,6 @@ const getEnterpreneurs = asyncHandler(async (req, res) => {
 const getInvestors = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({ role: "Investor" }).populate("details");
-    console.log(users);
 
     res.status(200).json({
       message: "Investors found successfully",
