@@ -6,7 +6,7 @@ import Project from "../models/projectModel.js";
 // Router       Get /api/funds
 // Access       Private
 const getFunds = asyncHandler(async (req, res) => {
-  const funds = await Fund.find();
+  const funds = await Fund.find().populate("investor").populate("project");
 
   res.status(200).json({
     funds: funds,
@@ -31,27 +31,38 @@ const setFund = asyncHandler(async (req, res) => {
     throw new Error("Please add project");
   }
 
-  const fundProject = await Project.findById(req.body.project);
-
-  if (fundProject) {
+  try {
     const fund = await Fund.create({
       amount: req.body.amount,
       investor: req.body.investor,
       project: req.body.project,
     });
-    if (fund) {
-      const projectFund = fundProject.raised_fund + fund.amount;
-      fundProject.raised_fund = projectFund;
-      const updatedProject = await fundProject.save();
 
-      if (updatedProject) {
+    console.log(fund);
+
+    if (fund) {
+      const project = await Project.findByIdAndUpdate(
+        req.body.project,
+        {
+          $push: { funds: fund._id },
+        },
+        { new: true }
+      );
+
+      project.raised_fund = project.raised_fund + fund.amount;
+      await project.save();
+
+      if (project) {
         res.status(201).json({
           fund: fund,
-          project: updatedProject,
+          project: project,
           message: "Successfully created fund",
         });
       }
     }
+  } catch (err) {
+    res.status(401);
+    throw new Error("Failed to add fund");
   }
 });
 
@@ -59,7 +70,9 @@ const setFund = asyncHandler(async (req, res) => {
 //route     Get api/funds/:id
 //access    Private
 const getFund = asyncHandler(async (req, res) => {
-  const fund = await Fund.findById(req.params.id);
+  const fund = await Fund.findById(req.params.id)
+    .populate("investor")
+    .populate("project");
 
   if (!fund) {
     res.status(400);
@@ -114,12 +127,10 @@ const deleteFund = asyncHandler(async (req, res) => {
   }
 
   try {
-    const fundProject = await Project.find(fund.project);
-    if (fundProject) {
-      const newRaised = (fundProject.raised_fund -= fund.amount);
-      fundProject.raised_fund = newRaised;
-      await fundProject.save();
-    }
+    const fundProject = await Project.findById(fund.project);
+    const previous = Number(fundProject.raised_fund) - Number(fund.amount);
+    fundProject.raised_fund = previous;
+    await fundProject.save();
 
     await Fund.deleteOne();
 
@@ -127,6 +138,7 @@ const deleteFund = asyncHandler(async (req, res) => {
     res.status(200).json({
       id: req.params.id,
       funds: funds,
+      project: fundProject,
       message: "Fund removed successfully",
     });
   } catch (error) {

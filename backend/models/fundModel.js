@@ -6,10 +6,6 @@ const fundSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    minimum: {
-      type: Number,
-      required: true,
-    },
     investor: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

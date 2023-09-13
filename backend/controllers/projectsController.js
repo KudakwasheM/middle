@@ -5,7 +5,10 @@ import Project from "../models/projectModel.js";
 // Router       Get /api/projects
 // Access       Public
 const getProjects = asyncHandler(async (req, res) => {
-  const projects = await Project.find().populate("details");
+  const projects = await Project.find()
+    .populate("details")
+    .populate("funds")
+    .populate("members");
 
   res.status(200).json({
     projects: projects,
@@ -66,7 +69,10 @@ const setProject = asyncHandler(async (req, res) => {
 //route     Get api/projects/:id
 //access    public
 const getProject = asyncHandler(async (req, res) => {
-  const project = await Project.findById(req.params.id).populate("details");
+  const project = await Project.findById(req.params.id)
+    .populate("details")
+    .populate("funds")
+    .populate("members");
 
   if (!project) {
     res.status(400);
@@ -114,7 +120,9 @@ const deleteProject = asyncHandler(async (req, res) => {
     throw new Error("Project not found");
   }
 
-  await Project.deleteOne();
+  await ProjectDetails.deleteOne({ project_id: project._id });
+
+  await Project.deleteOne({ _id: project._id });
 
   const projects = await Project.find();
   res.status(200).json({

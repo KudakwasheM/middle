@@ -79,9 +79,7 @@ const setDetail = asyncHandler(async (req, res) => {
     if (detail) {
       const project = await Project.findByIdAndUpdate(
         req.body.project_id,
-        {
-          $push: { details: detail._id },
-        },
+        { details: detail._id },
         { new: true }
       );
 
