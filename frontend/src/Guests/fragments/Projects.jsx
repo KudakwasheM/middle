@@ -17,7 +17,6 @@ const Projects = () => {
       .get("/projects")
       .then((res) => {
         setLoading(false);
-        console.log(res?.data);
         setProjects(res?.data?.projects.splice(-3));
       })
       .catch((err) => {

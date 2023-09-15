@@ -6,7 +6,7 @@ import Project from "../models/projectModel.js";
 // Route    Get /api/details/project/:id
 // Access   Private
 const getProjectDetail = asyncHandler(async (req, res) => {
-  const detail = await ProjectDetails.find({ project_id: req.params.project });
+  const detail = await ProjectDetails.find({ project_id: req.params.id });
 
   if (!detail) {
     res.status(400);
@@ -43,16 +43,16 @@ const setDetail = asyncHandler(async (req, res) => {
   const { short_summary, description, progress, advantages, deal, project_id } =
     req.body;
 
-  if (req.body.short_summary === "") {
+  if (!short_summary) {
     res.status(401);
     throw new Error("Please add short summary");
-  } else if (req.body.description === "") {
+  } else if (!description) {
     res.status(401);
     throw new Error("Please add description");
-  } else if (req.body.deal === "") {
+  } else if (!deal) {
     res.status(401);
     throw new Error("Please add deal");
-  } else if (req.body.project_id === "") {
+  } else if (!project_id) {
     res.status(401);
     throw new Error("Please add project");
   }
@@ -82,7 +82,7 @@ const setDetail = asyncHandler(async (req, res) => {
         { details: detail._id },
         { new: true }
       );
-
+      console.log(detail);
       if (project) {
         res.status(201).json({
           id: detail._id,
@@ -97,9 +97,7 @@ const setDetail = asyncHandler(async (req, res) => {
       }
     }
   } catch (err) {
-    await ProjectDetails.deleteOne();
-
-    res.status(401);
+    res.status(500);
     throw new Error("Failed to add details");
   }
 });

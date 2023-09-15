@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Project from "../models/projectModel.js";
+import ProjectDetails from "../models/projectDetailsModel.js";
 
 // @desc        Get all projects
 // Router       Get /api/projects
@@ -114,22 +115,27 @@ const updateProject = asyncHandler(async (req, res) => {
 //route     Delete api/projects/:id
 //access    Private
 const deleteProject = asyncHandler(async (req, res) => {
-  const project = await Project.findById(req.params.id);
-  if (!project) {
-    res.status(400);
-    throw new Error("Project not found");
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      res.status(400);
+      throw new Error("Project not found");
+    }
+
+    await ProjectDetails.deleteOne({ project_id: project._id });
+
+    await Project.deleteOne({ _id: project._id });
+
+    const projects = await Project.find();
+    res.status(200).json({
+      id: req.params.id,
+      projects: projects,
+      message: "Project removed successfully",
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to delete project");
   }
-
-  await ProjectDetails.deleteOne({ project_id: project._id });
-
-  await Project.deleteOne({ _id: project._id });
-
-  const projects = await Project.find();
-  res.status(200).json({
-    id: req.params.id,
-    projects: projects,
-    message: "Project removed successfully",
-  });
 });
 
 export { getProjects, setProject, getProject, updateProject, deleteProject };
