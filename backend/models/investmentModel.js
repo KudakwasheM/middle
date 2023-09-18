@@ -6,6 +6,10 @@ const investmetSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    minimum: {
+      type: Number,
+      required: true,
+    },
     remaining: {
       type: Number,
     },

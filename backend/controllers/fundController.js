@@ -20,17 +20,17 @@ const getFunds = asyncHandler(async (req, res) => {
 const setFund = asyncHandler(async (req, res) => {
   const { amount, investor, project } = req.body;
 
-  if (req.body.amount === "") {
+  if (!amount) {
     res.status(400);
     throw new Error("Please add amount");
-  } else if (req.body.investor === "") {
+  } else if (!investor) {
     res.status(400);
     throw new Error("Please add investor");
-  } else if (!req.body.project === "") {
+  } else if (!project) {
     res.status(400);
     throw new Error("Please add project");
   }
-
+  console.log(amount);
   try {
     const fund = await Fund.create({
       amount: req.body.amount,

@@ -88,7 +88,6 @@ const ProjectForm = () => {
       });
     await axiosClient.get(`/details/project/${id}`).then((res) => {
       console.log(res?.data);
-      // setDetails(res?.data?.detail)
     });
     await axiosClient
       .get(`/members/project/${id}`)

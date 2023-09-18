@@ -6,17 +6,20 @@ import Project from "../models/projectModel.js";
 // Route    Get /api/details/project/:id
 // Access   Private
 const getProjectDetail = asyncHandler(async (req, res) => {
-  const detail = await ProjectDetails.find({ project_id: req.params.id });
-
-  if (!detail) {
-    res.status(400);
-    throw new Error("Details not found");
+  try {
+    const detail = await ProjectDetails.find({ project_id: req.params.id });
+    if (!detail) {
+      res.status(400);
+      throw new Error("Details not found");
+    }
+    res.status(200).json({
+      detail: detail,
+      message: "Details found successfully",
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message || "Server error");
   }
-
-  res.status(200).json({
-    detail: detail,
-    message: "Details found successfully",
-  });
 });
 
 // @desc    Get detail
