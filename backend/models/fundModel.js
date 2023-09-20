@@ -11,6 +11,10 @@ const fundSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    project_percentage: {
+      type: Number,
+      default: 0,
+    },
     project: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

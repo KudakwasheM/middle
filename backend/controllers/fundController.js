@@ -30,16 +30,14 @@ const setFund = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add project");
   }
-  console.log(amount);
+
+  const fund = await Fund.create({
+    amount: req.body.amount,
+    investor: req.body.investor,
+    project: req.body.project,
+  });
+
   try {
-    const fund = await Fund.create({
-      amount: req.body.amount,
-      investor: req.body.investor,
-      project: req.body.project,
-    });
-
-    console.log(fund);
-
     if (fund) {
       const project = await Project.findByIdAndUpdate(
         req.body.project,
@@ -53,6 +51,10 @@ const setFund = asyncHandler(async (req, res) => {
       await project.save();
 
       if (project) {
+        fund.project_percentage =
+          Number(fund.amount) / Number(project.expected_fund);
+        await fund.save();
+
         res.status(201).json({
           fund: fund,
           project: project,
@@ -89,31 +91,38 @@ const getFund = asyncHandler(async (req, res) => {
 //route     Put api/funds/:id
 //access    Private
 const updateFund = asyncHandler(async (req, res) => {
-  const fund = await Fund.findById(req.params.id);
+  try {
+    const fund = await Fund.findById(req.params.id);
 
-  if (!fund) {
+    if (!fund) {
+      res.status(400);
+      throw new Error("Fund not found");
+    }
+
+    if (req.body.amount) {
+      const fundProject = await Project.findById(fund.project);
+
+      const previous = fundProject.raised_fund - fund.amount;
+      fundProject.raised_fund = Number(previous) + Number(req.body.amount);
+      await fundProject.save();
+      fund.project_percentage =
+        Number(fund.amount) / Number(fundProject.expected_fund);
+    }
+
+    fund.amount = req.body.amount || fund.amount;
+    fund.investor = req.body.investor || fund.investor;
+    fund.project = req.body.project || fund.project;
+
+    const updatedFund = await fund.save();
+
+    res.status(200).json({
+      fund: updatedFund,
+      message: "Fund updated successfully",
+    });
+  } catch (error) {
     res.status(400);
-    throw new Error("Fund not found");
+    throw new Error("Failed to update fund");
   }
-
-  if (req.body.amount) {
-    const fundProject = await Project.findById(fund.project);
-
-    const previous = fundProject.raised_fund - fund.amount;
-    fundProject.raised_fund = Number(previous) + Number(req.body.amount);
-    await fundProject.save();
-  }
-
-  fund.amount = req.body.amount || fund.amount;
-  fund.investor = req.body.investor || fund.investor;
-  fund.project = req.body.project || fund.project;
-
-  const updatedFund = await fund.save();
-
-  res.status(200).json({
-    fund: updatedFund,
-    message: "Fund updated successfully",
-  });
 });
 
 //desc      Delete fund
