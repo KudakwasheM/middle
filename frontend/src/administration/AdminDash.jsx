@@ -23,20 +23,17 @@ const AdminDash = () => {
     setLoading(true);
 
     await axiosClient.get("/projects").then((res) => {
-      console.log(res);
       let projectsCount = res.data.projects.length;
       setProjects(projectsCount);
     });
 
     await axiosClient.get("/users").then((res) => {
-      console.log(res);
       let usersCount = res.data.users.length;
       setUsers(res.data.users.splice(-4));
       setUsersNo(usersCount);
     });
 
     await axiosClient.get("/funds").then((res) => {
-      console.log(res);
       let fundsAmounts = 0;
       for (let i = 0; i < res.data.funds.length; i++) {
         fundsAmounts += res.data.funds[i].amount;
@@ -46,7 +43,6 @@ const AdminDash = () => {
     });
 
     await axiosClient.get("/users/investors").then((res) => {
-      console.log(res);
       let usersCount = res.data.users.length;
       setInvestors(usersCount);
     });
@@ -109,6 +105,7 @@ const AdminDash = () => {
               <thead className="px-5">
                 <th className="text-start py-2 ">Amount</th>
                 <th className="text-start py-2 ">Project</th>
+                <th className="text-start py-2 ">Percentage</th>
                 <th className="text-start py-2 ">Investor</th>
                 <th className="text-start py-2 ">Created On</th>
                 <th className="text-start py-2 ">Actions</th>
@@ -121,6 +118,9 @@ const AdminDash = () => {
                         <tr className="border-t">
                           <td className="py-3">{fund.amount}</td>
                           <td className="py-3">{fund.project.name}</td>
+                          <td className="py-3">
+                            {fund.project_percentage.toFixed(2)}%
+                          </td>
                           <td className="py-3">{fund.investor.name}</td>
                           <td className="py-3">
                             {moment(fund.createdAt).format("LL")}

@@ -75,10 +75,8 @@ const setMember = asyncHandler(async (req, res) => {
 
       if (project) {
         res.status(201).json({
-          name: member.name,
-          position: member.position,
-          description: member.description,
-          project_id: member.project_id,
+          member: member,
+          message: "Successfully added a member",
         });
       } else {
         throw new Error("Failed to update project with member");
@@ -86,7 +84,6 @@ const setMember = asyncHandler(async (req, res) => {
     }
   } catch (err) {
     res.status(400);
-    await TeamMember.deleteOne();
     throw new Error("Failed to add member");
   }
 });

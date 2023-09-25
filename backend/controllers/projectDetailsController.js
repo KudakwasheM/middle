@@ -7,8 +7,10 @@ import Project from "../models/projectModel.js";
 // Access   Private
 const getProjectDetail = asyncHandler(async (req, res) => {
   try {
-    const detail = await ProjectDetails.find({ project_id: req.params.id });
+    const detail = await ProjectDetails.findOne({ project_id: req.params.id });
+    console.log(detail);
     if (!detail) {
+      console.log(detail);
       res.status(400);
       throw new Error("Details not found");
     }

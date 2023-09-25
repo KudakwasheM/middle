@@ -6,6 +6,8 @@ import {
   getUser,
   getUsers,
   setUser,
+  toggleActivate,
+  toggleSubscribe,
   updateUser,
 } from "../controllers/usersController.js";
 import { admin, protect } from "../middlewares/authMiddleware.js";
@@ -36,5 +38,11 @@ router
   .put(protect, updateDetail)
   .delete(protect, deleteDetail);
 router.route("investors/details/:investor").get(protect, getInvestorDetail);
+
+//Activate
+router.route("/activate/:id").put(protect, toggleActivate);
+
+//Subscribe
+router.route("/subscribe/:id").put(protect, toggleSubscribe);
 
 export default router;

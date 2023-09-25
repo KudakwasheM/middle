@@ -116,7 +116,7 @@ const Administration = () => {
             Users
           </NavLink>
         </div>
-        <div>
+        <div className="mt-2">
           <NavLink
             to="/"
             onClick={logoutHandler}

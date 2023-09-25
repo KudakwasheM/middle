@@ -97,24 +97,14 @@ const setDetail = asyncHandler(async (req, res) => {
 
       if (project) {
         res.status(201).json({
-          id: detail._id,
-          description: detail.description,
-          country: detail.country,
-          minimum: detail.minimum,
-          maximum: detail.maximum,
-          locations: detail.locations,
-          mobile: detail.mobile,
-          industries: detail.industries,
-          investor_id: detail.investor_id,
+          details: detail,
+          message: "Successfully added details",
         });
       }
     }
   } catch (err) {
-    await InvestorDetails.deleteOne();
-
-    // res.status(401);
-    // throw new Error("Failed to add details");
-    res.status(500).json({ error: err.message });
+    res.status(500);
+    throw new Error("Failed to add details");
   }
 });
 
@@ -136,14 +126,8 @@ const updateDetail = asyncHandler(async (req, res) => {
     const updatedDetail = await detail.save();
 
     res.status(200).json({
-      id: updatedDetail._id,
-      description: updatedDetail.description,
-      country: updatedDetail.country,
-      minimum: updatedDetail.minimum,
-      maximum: updatedDetail.maximum,
-      locations: updatedDetail.locations,
-      mobile: updatedDetail.mobile,
-      industries: updatedDetail.industries,
+      details: detail,
+      message: "Successfully updated details",
     });
   } else {
     res.status(404);

@@ -153,6 +153,58 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const toggleActivate = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+
+    user.active = !user.active;
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      active: updatedUser.active,
+      role: updatedUser.role,
+    });
+  } catch (err) {
+    res.status(500);
+    throw new Error("Failed to activate user");
+  }
+});
+
+const toggleSubscribe = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+
+    user.subscribed = !user.subscribed;
+    const updatedUser = await user.save();
+    console.log(updateUser);
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      active: updatedUser.active,
+      role: updatedUser.role,
+    });
+  } catch (err) {
+    res.status(500);
+    throw new Error("Failed to activate user");
+  }
+});
+
 //desc      Delete use
 //route     Delete api/users/:id
 //access    Private
@@ -181,5 +233,7 @@ export {
   getUser,
   setUser,
   updateUser,
+  toggleActivate,
+  toggleSubscribe,
   deleteUser,
 };

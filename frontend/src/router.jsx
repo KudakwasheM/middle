@@ -18,6 +18,7 @@ import Sponsors from "./Guests/Sponsors/Sponsors";
 import Sponsor from "./Guests/Sponsors/Sponsor";
 import Testimonial from "./Guests/Testimonials/Testimonial";
 import Testimonials from "./Guests/Testimonials/Testimonials";
+import Project from "./administration/projects/Project";
 import Projects from "./administration/projects/Projects";
 import ProjectForm from "./administration/projects/ProjectForm";
 import Investors from "./administration/investors/Investors";
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
       { path: "/admin", element: <Navigate to="/admin/dashboard" /> },
       { path: "dashboard", element: <AdminDash /> },
       { path: "projects", element: <Projects /> },
-      { path: "projects/:id", element: <Projects /> },
+      { path: "projects/:id", element: <Project /> },
       { path: "projects/create", element: <ProjectForm /> },
       { path: "projects/edit/:id", element: <ProjectForm /> },
       { path: "funds", element: <Funds /> },
