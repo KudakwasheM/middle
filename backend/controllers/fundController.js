@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Fund from "../models/fundModel.js";
 import Project from "../models/projectModel.js";
+import User from "../models/userModel.js";
 
 // @desc        Get all funds
 // Router       Get /api/funds
@@ -18,31 +19,44 @@ const getFunds = asyncHandler(async (req, res) => {
 //route     Post api/funds
 //access    Private
 const setFund = asyncHandler(async (req, res) => {
-  const { amount, investor, project } = req.body;
-
-  if (!amount) {
-    res.status(400);
-    throw new Error("Please add amount");
-  } else if (!investor) {
-    res.status(400);
-    throw new Error("Please add investor");
-  } else if (!project) {
-    res.status(400);
-    throw new Error("Please add project");
-  }
-
-  const fund = await Fund.create({
-    amount: req.body.amount,
-    investor: req.body.investor,
-    project: req.body.project,
-  });
-
   try {
+    const { amount, investor, project } = req.body;
+
+    if (!amount) {
+      res.status(400);
+      throw new Error("Please add amount");
+    } else if (!investor) {
+      res.status(400);
+      throw new Error("Please add investor");
+    } else if (!project) {
+      res.status(400);
+      throw new Error("Please add project");
+    }
+
+    const investorFound = User.findById(req.body.investor);
+    const projectFound = Project.findById(req.body.project);
+
+    if (!investorFound) {
+      res.status(400);
+      throw new Error("Investor not found");
+    }
+
+    if (!projectFound) {
+      res.status(400);
+      throw new Error("Project not found");
+    }
+
+    const fund = await Fund.create({
+      amount: req.body.amount,
+      investor: req.body.investor,
+      project: req.body.project,
+    });
+
     if (fund) {
       const project = await Project.findByIdAndUpdate(
         req.body.project,
         {
-          $push: { funds: fund._id },
+          $push: { funds: fund._id, investors: fund.investor },
         },
         { new: true }
       );

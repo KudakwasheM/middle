@@ -6,9 +6,9 @@ import User from "../models/userModel.js";
 //route     POST /api/login
 //@access   Public
 const login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     if (!email || !password) {
       res.status(401);
       throw new Error("Please provide both email and password");

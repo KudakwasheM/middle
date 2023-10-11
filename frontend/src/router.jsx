@@ -26,6 +26,11 @@ import User from "./administration/users/User";
 import Funds from "./administration/funds/Funds";
 import FundsForm from "./administration/funds/FundsForm";
 import Fund from "./administration/funds/Fund";
+import Profile from "./layouts/profile/Profile";
+import ChangePassword from "./layouts/profile/ChangePassword";
+import EnterpreneurProjects from "./enterprenuer/myprojects/EnterpreneurProjects";
+import InvestorProfile from "./investor/profile/InvestorProfile";
+import InvestorUpdate from "./layouts/profile/InvestorUpdate";
 
 const router = createBrowserRouter([
   {
@@ -71,14 +76,27 @@ const router = createBrowserRouter([
         element: <Navigate to="/enterpreneur/dashboard" />,
       },
       { path: "dashboard", element: <EnterprenuerDash /> },
+      {
+        path: "myprojects",
+        element: <EnterpreneurProjects />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "changepassword",
+        element: <ChangePassword />,
+      },
     ],
   },
   {
     path: "/investor",
     element: <Investor />,
     children: [
-      { path: "/investor", element: <Navigate to="/investor/dashboard" /> },
-      { path: "dashboard", element: <InvestorDash /> },
+      { path: "/investor", element: <Navigate to="/investor/profile" /> },
+      { path: "profile", element: <InvestorProfile /> },
+      { path: "profile/:id", element: <InvestorUpdate /> },
     ],
   },
   { path: "/login", element: <Login /> },

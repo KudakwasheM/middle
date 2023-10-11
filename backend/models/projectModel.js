@@ -54,6 +54,7 @@ const projectSchema = mongoose.Schema(
         ref: "Fund",
       },
     ],
+    investors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

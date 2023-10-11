@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
+  AiOutlineDollar,
   AiOutlineEdit,
   AiOutlineEye,
+  AiOutlineGroup,
   AiOutlinePercentage,
+  AiOutlineProject,
+  AiOutlineTeam,
 } from "react-icons/ai";
 import Card from "./components/Card";
 import axiosClient from "../axiosClient";
@@ -66,7 +70,7 @@ const AdminDash = () => {
                 <p className="text-sm">Projects</p>
               </div>
               <div className="p-3 bg-[rgb(0,223,154)] text-white">
-                <AiOutlinePercentage size={20} />
+                <AiOutlineProject size={20} />
               </div>
             </div>
             <div className="flex shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] p-3">
@@ -84,7 +88,7 @@ const AdminDash = () => {
                 <p className="text-sm">Funds Raised</p>
               </div>
               <div className="p-3 bg-[rgb(0,223,154)] text-white">
-                <AiOutlinePercentage size={20} />
+                <AiOutlineDollar size={20} />
               </div>
             </div>
             <div className="flex shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] p-3">
@@ -93,7 +97,7 @@ const AdminDash = () => {
                 <p className="text-sm">Users</p>
               </div>
               <div className="p-3 bg-[rgb(0,223,154)] text-white">
-                <AiOutlinePercentage size={20} />
+                <AiOutlineTeam size={20} />
               </div>
             </div>
           </div>

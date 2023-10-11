@@ -136,6 +136,7 @@ const updateUser = asyncHandler(async (req, res) => {
     if (req.body.password) {
       user.password = req.body.password;
     }
+    console.log(req.body.password);
 
     const updatedUser = await user.save();
 
