@@ -1,12 +1,12 @@
 import asyncHandler from "express-async-handler";
-import InvestorDetails from "../models/investorModel.js";
+import InvestorDetail from "../models/investorModel.js";
 import User from "../models/userModel.js";
 
 // @desc    Get detail on investor
 // Route    Get /api/users/investors/details/:investor
 // Access   Private
 const getInvestorDetail = asyncHandler(async (req, res) => {
-  const detail = await InvestorDetails.find({
+  const detail = await InvestorDetail.findOne({
     investor_id: req.params.investor,
   });
 
@@ -25,7 +25,7 @@ const getInvestorDetail = asyncHandler(async (req, res) => {
 // Route    Get /api/users/investors/details/:id
 // Access   Private
 const getDetail = asyncHandler(async (req, res) => {
-  const details = await InvestorDetails.findById(req.params.id);
+  const details = await InvestorDetail.findById(req.params.id);
 
   if (!details) {
     res.status(400);
@@ -67,7 +67,7 @@ const setDetail = asyncHandler(async (req, res) => {
     throw new Error("Please add investor");
   }
 
-  const exists = await InvestorDetails.findOne({
+  const exists = await InvestorDetail.findOne({
     investor_id: req.body.investor_id,
   });
 
@@ -77,7 +77,7 @@ const setDetail = asyncHandler(async (req, res) => {
   }
 
   try {
-    const detail = await InvestorDetails.create({
+    const detail = await InvestorDetail.create({
       description,
       country,
       minimum,
@@ -112,7 +112,7 @@ const setDetail = asyncHandler(async (req, res) => {
 // Route    Put /api/users/investors/details/:id
 // Access   Private
 const updateDetail = asyncHandler(async (req, res) => {
-  const detail = await InvestorDetails.findById(req.params.id);
+  const detail = await InvestorDetail.findById(req.params.id);
 
   if (detail) {
     detail.description = req.body.description || detail.description;
@@ -139,7 +139,7 @@ const updateDetail = asyncHandler(async (req, res) => {
 //route     Delete api/details/:id
 //access    Private
 const deleteDetail = asyncHandler(async (req, res) => {
-  const detail = await InvestorDetails.findById(req.params.id);
+  const detail = await InvestorDetail.findById(req.params.id);
 
   if (!detail) {
     res.status(400);
@@ -153,9 +153,9 @@ const deleteDetail = asyncHandler(async (req, res) => {
   );
 
   if (investor) {
-    await InvestorDetails.deleteOne({ _id: req.params.id });
+    await InvestorDetail.deleteOne({ _id: req.params.id });
 
-    const details = await InvestorDetails.find();
+    const details = await InvestorDetail.find();
     res.status(200).json({
       id: req.params.id,
       details: details,

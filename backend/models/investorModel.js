@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./userModel.js";
 
 const investorSchema = mongoose.Schema(
   {
@@ -37,6 +38,11 @@ const investorSchema = mongoose.Schema(
   }
 );
 
-const InvestorDetails = mongoose.model("InvestorDetail", investorSchema);
+investorSchema.pre("remove", (next) => {
+  User.remove({ details: this._id }).exec();
+  next();
+});
 
-export default InvestorDetails;
+const InvestorDetail = mongoose.model("InvestorDetail", investorSchema);
+
+export default InvestorDetail;

@@ -53,7 +53,7 @@ const getInvestors = asyncHandler(async (req, res) => {
 // Route    Get /api/users/:id
 // Access   Private
 const getUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).populate("details");
 
   if (!user) {
     res.status(400);
@@ -62,6 +62,7 @@ const getUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     user: user,
+    hello: "Hello",
     message: "User found successfully",
   });
 });

@@ -16,6 +16,6 @@ router
   .get(protect, getDetail)
   .put(protect, updateDetail)
   .delete(protect, deleteDetail);
-router.route("/:investor").get(protect, getInvestorDetail);
+router.route("/u/:investor").get(protect, getInvestorDetail);
 
 export default router;
