@@ -44,7 +44,7 @@ const login = asyncHandler(async (req, res, next) => {
       role: user.role,
     });
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 });
 
@@ -83,36 +83,42 @@ const login = asyncHandler(async (req, res, next) => {
 //route     POST /api/register
 //@access   Public
 const register = asyncHandler(async (req, res) => {
-  const { name, username, active, email, role, password } = req.body;
+  try {
+    const { name, username, active, email, role, password } = req.body;
 
-  const emailExist = await User.findOne({ email });
-  if (emailExist) {
-    res.status(400);
-    throw new Error("Email already exists");
-  }
+    const emailExist = await User.findOne({ email });
+    if (emailExist) {
+      res.status(400);
+      throw new Error("Email already exists");
+    }
 
-  const user = await User.create({
-    name,
-    username,
-    email,
-    active,
-    role,
-    password,
-  });
-
-  if (user) {
-    generateToken(res, user._id);
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      active: user.active,
-      subscribed: user.subscribed,
-      role: user.role,
+    const user = await User.create({
+      name,
+      username,
+      email,
+      active,
+      role,
+      password,
     });
-  } else {
+
+    if (user) {
+      generateToken(res, user._id);
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        active: user.active,
+        subscribed: user.subscribed,
+        role: user.role,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  } catch (err) {
     res.status(400);
+    console.log(err);
     throw new Error("Invalid user data");
   }
 });

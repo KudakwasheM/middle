@@ -1,39 +1,62 @@
-import multer from "multer";
 import UserProfile from "../models/userProfileModel.js";
 import asyncHandler from "express-async-handler";
-
-const Storage = multer.diskStorage({
-  destination: "profiles",
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({
-  storage: Storage,
-}).single("profile");
+import path from "path";
+import { URL } from "url";
+import fs from "fs";
 
 const saveProfile = asyncHandler(async (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      console.log(err);
-      res.status(400);
-      throw new Error("Failed to upload");
-    } else {
-      const profile = new UserProfile({
-        image: {
-          data: req.file.filename,
-          contentType: "image/jpg",
-        },
-        user_id: req.body.user_id,
-      });
-      profile.save();
+  try {
+    const profile = req.files.image;
+    const user_id = req.user._id;
 
-      res.status(201).json({
-        message: "Successfully uploaded Profile",
+    const __dirname = decodeURI(new URL(".", import.meta.url).pathname);
+
+    const basePath = `./backend/public/profiles/${user_id}`;
+
+    fs.mkdir(basePath, (err) => {
+      if (err) {
+        console.error("Failed to create directory:", err);
+      } else {
+        console.log("Directory created successfully!");
+      }
+    });
+
+    const dirname = process.cwd();
+    const imagePath = path.join(
+      dirname,
+      `/backend/public/profiles/${user_id}/${profile.name}`
+    );
+
+    const imageUpload = await profile.mv(imagePath);
+    // await profile.mv(imagePath);
+
+    if (imageUpload) {
+      const userDP = await UserProfile.create({
+        image: imagePath,
+        path: `/profiles/${profile.name}`,
+        user_id: user_id,
+      });
+
+      res.status(200).json({
+        profile: userDP,
+        message: "Profile uploaded successfully",
       });
     }
-  });
+    // res.status(200).json({
+    //   image: `/profiles/${profile.name}`,
+    //   message: "Done...",
+    // });
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+  }
 });
 
-export { saveProfile };
+const fileReading = (req, res) => {
+  // const fileI = fs.createReadStream("/profiles/CEST3574.JPG");
+  fs.createReadStream("../middle/backend/public/profiles/CEST3574.JPG").pipe(
+    res
+  );
+};
+
+export { saveProfile, fileReading };

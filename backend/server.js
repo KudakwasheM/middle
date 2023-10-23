@@ -17,6 +17,7 @@ import profileRoutes from "./routes/profileRoutes.js";
 import enterpreneurRoutes from "./routes/enterpreneurRoutes.js";
 import investorDetailsRoutes from "./routes/investorDetailsRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
+import fileUpload from "express-fileupload";
 
 const port = process.env.PORT || 5000;
 
@@ -24,7 +25,9 @@ connectDB();
 
 const app = express();
 
+app.use(express.static("public"));
 app.use(express.json());
+app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
@@ -49,6 +52,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/users/image", profileRoutes);
 app.use("/api/profile", enterpreneurRoutes);
 app.use("/api/investors/details", investorDetailsRoutes);
+// app.use("/api/images");
 
 app.use(notFound);
 app.use(errorHandler);

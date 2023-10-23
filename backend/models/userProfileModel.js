@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 
 const profileSchema = mongoose.Schema({
   image: {
-    data: Buffer,
-    contentType: String,
+    type: String,
+    required: true,
+  },
+  path: {
+    type: String,
   },
   user_id: {
     type: mongoose.Schema.Types.ObjectId,

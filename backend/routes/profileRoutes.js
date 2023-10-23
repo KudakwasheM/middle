@@ -1,8 +1,12 @@
 import express from "express";
-import { saveProfile } from "../controllers/profileController.js";
+import { fileReading, saveProfile } from "../controllers/profileController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(saveProfile);
+router.route("/").post(protect, saveProfile);
+router.route("/profile").get(protect, fileReading);
+
+// router.route("/").get()
 
 export default router;
