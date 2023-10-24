@@ -1,35 +1,58 @@
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
+import Token from "../models/tokenModel.js";
+import sendEmail from "../config/sendEmail.js";
+import crypto from "crypto";
 
 //@desc     Auth user/set token
 //route     POST /api/login
 //@access   Public
-const login = asyncHandler(async (req, res, next) => {
+const login = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(401);
+      res.status(401).json({
+        message: "Please provide both email and password",
+      });
       throw new Error("Please provide both email and password");
     }
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      res.status(401);
+      res.status(401).json({
+        message: "Invalid email or password",
+      });
       throw new Error("Invalid email or password");
     }
 
     if (!user.active) {
-      res.status(401);
-      throw new Error("User not active");
+      const token = await Token.findOne({
+        userId: user._id,
+      });
+
+      if (!token) {
+        token = await new Token({
+          userId: user._id,
+          token: crypto.randomBytes(32).toString("hex"),
+        }).save();
+
+        const url = `${process.env.BASE_URL}/users/${user._id}/verify/${token.token}`;
+        await sendEmail(user.email, "Verify Email", url);
+      }
+      res.status(401).json({
+        message: "An email was sent to your account. Please verify.",
+      });
     }
 
     const isPasswordMatch = await user.matchPassword(password);
 
     if (!isPasswordMatch) {
-      res.status(401);
+      res.status(401).json({
+        message: "User not active",
+      });
       throw new Error("Invalid email or password");
     }
 
@@ -45,6 +68,10 @@ const login = asyncHandler(async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(500).json({
+      message: "Failed to login user",
+    });
+    throw new Error("Invalid email or password");
   }
 });
 
@@ -181,4 +208,91 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { login, register, logout, profile, updateUser };
+//@desc     Register new user
+//route     POST /api/register
+//@access   Public
+const registerEmail = asyncHandler(async (req, res) => {
+  try {
+    const { name, username, active, email, role, password } = req.body;
+
+    const emailExist = await User.findOne({ email });
+    if (emailExist) {
+      res.status(400);
+      throw new Error("Email already exists");
+    }
+
+    const user = await User.create({
+      name,
+      username,
+      email,
+      active,
+      role,
+      password,
+    });
+
+    if (user) {
+      const token = await new Token({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+
+      const url = `${process.env.BASE_URL}/users/${user._id}/verify/${token.token}`;
+      await sendEmail(user.email, "Verify Email", url);
+
+      res.status(201).json({
+        message: "An email was sent to your account. Please verify.",
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  } catch (err) {
+    res.status(500).send({ message: "Internal Server Error" });
+    console.log(err);
+    throw new Error("Invalid user data");
+  }
+});
+
+const verifyAccount = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+
+    if (!user) {
+      return res.status(401).send({
+        message: "Invalid link",
+      });
+    }
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!token) {
+      return res.status(401).send({
+        message: "Invalid link",
+      });
+    }
+
+    await User.updateOne({ _id: user._id, active: true });
+    await token.remove();
+
+    res.status(200).send({
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+    console.log(err);
+    throw new Error("Invalid user data");
+  }
+});
+
+export {
+  login,
+  register,
+  registerEmail,
+  verifyAccount,
+  logout,
+  profile,
+  updateUser,
+};
