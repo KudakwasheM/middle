@@ -236,7 +236,7 @@ const registerEmail = asyncHandler(async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
 
-      const url = `${process.env.BASE_URL}/users/${user._id}/verify/${token.token}`;
+      const url = `Good day ${user.name}, \n\nThank you for joining us at Capedia. To verify your email use the link below. \n\n${process.env.BASE_URL}/verified/${user._id}/${token.token}`;
       await sendEmail(user.email, "Verify Email", url);
 
       res.status(201).json({
@@ -255,7 +255,8 @@ const registerEmail = asyncHandler(async (req, res) => {
 
 const verifyAccount = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    const user = await User.findOne({ _id: req.params.id }).select("-password");
+    console.log(user);
 
     if (!user) {
       return res.status(401).send({
@@ -267,6 +268,7 @@ const verifyAccount = asyncHandler(async (req, res) => {
       userId: user._id,
       token: req.params.token,
     });
+    console.log(token);
 
     if (!token) {
       return res.status(401).send({
@@ -274,16 +276,19 @@ const verifyAccount = asyncHandler(async (req, res) => {
       });
     }
 
-    await User.updateOne({ _id: user._id, active: true });
-    await token.remove();
+    await User.findByIdAndUpdate(
+      { _id: user._id },
+      { active: true },
+      { new: true }
+    );
+    await token.deleteOne({ _id: token._id });
 
-    res.status(200).send({
+    res.status(200).json({
       message: "Email verified successfully",
     });
   } catch (error) {
+    console.log("Failed");
     res.status(500).send({ message: "Internal Server Error" });
-    console.log(err);
-    throw new Error("Invalid user data");
   }
 });
 

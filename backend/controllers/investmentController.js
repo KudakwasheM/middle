@@ -82,7 +82,7 @@ const deleteInvestment = asyncHandler(async (req, res) => {
     throw new Error("investment not found");
   }
 
-  await Investment.deleteOne();
+  await Investment.deleteOne({ _id: investment._id });
 
   const investments = await Investment.find();
   res.status(200).json({

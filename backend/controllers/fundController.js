@@ -155,7 +155,7 @@ const deleteFund = asyncHandler(async (req, res) => {
     fundProject.raised_fund = previous;
     await fundProject.save();
 
-    await Fund.deleteOne();
+    await Fund.deleteOne({ _id: fund._id });
 
     const funds = await Fund.find();
     res.status(200).json({

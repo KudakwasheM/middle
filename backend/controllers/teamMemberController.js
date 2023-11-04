@@ -123,7 +123,7 @@ const deleteMember = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  await TeamMember.deleteOne();
+  await TeamMember.deleteOne({ _id: member._id });
 
   const members = await TeamMember.find();
   res.status(200).json({

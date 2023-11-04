@@ -34,6 +34,11 @@ const projectSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    published: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     enterpreneur: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

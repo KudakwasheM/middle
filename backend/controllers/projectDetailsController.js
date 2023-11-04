@@ -147,7 +147,7 @@ const deleteDetail = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  await ProjectDetails.deleteOne();
+  await ProjectDetails.deleteOne({ _id: detail._id });
 
   const details = await ProjectDetails.find();
   res.status(200).json({

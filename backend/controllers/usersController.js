@@ -218,7 +218,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  await User.deleteOne();
+  await User.deleteOne({ _id: user._id });
 
   const users = await User.find();
   res.status(200).json({

@@ -103,7 +103,7 @@ const deleteTestimonial = asyncHandler(async (req, res) => {
     throw new Error("Testimonial not found");
   }
 
-  await testimonial.deleteOne();
+  await testimonial.deleteOne({ _id: testimonial._id });
 
   const testimonials = await Testimonial.find();
   res.status(200).json({
