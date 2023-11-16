@@ -3,6 +3,8 @@ import {
   deleteProject,
   getProject,
   getProjects,
+  getPublishedProjects,
+  publishProject,
   setProject,
   updateProject,
 } from "../controllers/projectsController.js";
@@ -16,5 +18,7 @@ router
   .get(getProject)
   .put(protect, updateProject)
   .delete(protect, deleteProject);
+router.route("/:id/publish").put(protect, publishProject);
+router.route("/all/published").get(getPublishedProjects);
 
 export default router;

@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import ProjectDetails from "../models/projectDetailsModel.js";
 import Project from "../models/projectModel.js";
+import fs from "fs";
+import path, { basename } from "path";
 
 // @desc    Get detail on project
 // Route    Get /api/details/project/:id
@@ -107,6 +109,50 @@ const setDetail = asyncHandler(async (req, res) => {
   }
 });
 
+const uploadFiles = asyncHandler(async (req, res) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      res.status(400);
+      throw new Error("No files were uploaded");
+    }
+    const basePath = `./backend/public/projects/${req.params.id}`;
+
+    if (!fs.existsSync(basePath)) {
+      fs.mkdirSync(basePath, { recursive: true });
+    }
+    // Assuming you have a form field named "files[]" for multiple file uploads
+    const files = req.files.files;
+
+    // Process each uploaded file
+    const uploadedFiles = [];
+    for (const file of files) {
+      // Generate a unique filename or use the original filename
+      const fileName = `${Date.now()}_${file.name}`;
+
+      const filePath = path.join(basePath, fileName);
+      // Move the file to a designated storage location
+      await file.mv(filePath);
+
+      uploadedFiles.push({
+        filename: fileName,
+        originalname: file.name,
+        mimetype: file.mimetype,
+        size: file.size,
+      });
+    }
+
+    res.status(200).json({
+      files: uploadedFiles,
+      message: "Files uploaded successfully",
+    });
+  } catch (err) {
+    console.error("Error uploading files: ", err);
+    res.status(500).json({
+      message: "Failed to upload files",
+    });
+  }
+});
+
 // @desc    Update user
 // Route    Put /api/users/:id
 // Access   Private
@@ -157,4 +203,11 @@ const deleteDetail = asyncHandler(async (req, res) => {
   });
 });
 
-export { getProjectDetail, getDetail, setDetail, updateDetail, deleteDetail };
+export {
+  getProjectDetail,
+  getDetail,
+  uploadFiles,
+  setDetail,
+  updateDetail,
+  deleteDetail,
+};

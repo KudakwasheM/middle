@@ -5,12 +5,12 @@ import { URL } from "url";
 import fs from "fs";
 
 const saveProfile = asyncHandler(async (req, res) => {
+  const profile = req.files.image;
+  const auth = req.user._id;
+
+  const basePath = `./backend/public/profiles/${auth}`;
+
   try {
-    const profile = req.files.image;
-    const auth = req.user._id;
-
-    const basePath = `./backend/public/profiles/${auth}`;
-
     if (!fs.existsSync(basePath)) {
       fs.mkdirSync(basePath, { recursive: true });
     } else {
@@ -48,7 +48,6 @@ const saveProfile = asyncHandler(async (req, res) => {
       throw new Error("Failed to move the file");
     }
   } catch (err) {
-    console.log("There is an error", err);
     res.status(500).json({
       message: "Failed to upload profile",
     });

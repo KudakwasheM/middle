@@ -16,6 +16,10 @@ const investmetSchema = mongoose.Schema(
     project_types: {
       type: [String],
     },
+    published: {
+      type: Boolean,
+      default: false,
+    },
     investor: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

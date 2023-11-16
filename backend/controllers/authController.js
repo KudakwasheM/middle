@@ -51,7 +51,7 @@ const login = asyncHandler(async (req, res) => {
 
     if (!isPasswordMatch) {
       res.status(401).json({
-        message: "User not active",
+        message: "Invalid email or password",
       });
       throw new Error("Invalid email or password");
     }

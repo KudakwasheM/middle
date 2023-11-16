@@ -9,7 +9,8 @@ const getProjects = asyncHandler(async (req, res) => {
   const projects = await Project.find()
     .populate("details")
     .populate("funds")
-    .populate("members");
+    .populate("members")
+    .populate("enterpreneur");
 
   res.status(200).json({
     projects: projects,
@@ -111,6 +112,31 @@ const updateProject = asyncHandler(async (req, res) => {
   });
 });
 
+//desc      Published Projects
+//route     Get api/projects/published
+//access    Public
+const getPublishedProjects = asyncHandler(async (req, res) => {
+  try {
+    const projects = await Project.find({ published: true })
+      .populate("details")
+      .populate("funds")
+      .populate("members")
+      .populate("enterpreneur");
+
+    res.status(200).json({
+      projects: projects,
+      message: "Successfully retrieved projects",
+    });
+  } catch (err) {
+    console.error(err); // Log the error for debugging purposes
+
+    res.status(500).json({
+      message: "Failed to retrieve projects",
+      error: err.message, // Include the error message in the response
+    });
+  }
+});
+
 //desc      Delete project
 //route     Delete api/projects/:id
 //access    Private
@@ -138,4 +164,39 @@ const deleteProject = asyncHandler(async (req, res) => {
   }
 });
 
-export { getProjects, setProject, getProject, updateProject, deleteProject };
+const publishProject = asyncHandler(async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      res.status(404).json({ success: false, error: "Project not found" });
+    }
+
+    if (project.published) {
+      console.log(project);
+      project.published = false;
+    } else {
+      project.published = true;
+    }
+
+    await project.save();
+
+    res.status(200).json({
+      message: "Successfully published project",
+      project: project,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to publish project");
+  }
+});
+
+export {
+  getProjects,
+  setProject,
+  getProject,
+  updateProject,
+  deleteProject,
+  publishProject,
+  getPublishedProjects,
+};

@@ -6,6 +6,7 @@ import {
   getProjectDetail,
   setDetail,
   updateDetail,
+  uploadFiles,
 } from "../controllers/projectDetailsController.js";
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router
   .put(protect, updateDetail)
   .delete(protect, deleteDetail);
 router.route("/project/:id").get(protect, getProjectDetail);
+router.route("/upload/:id").post(protect, uploadFiles);
 
 export default router;

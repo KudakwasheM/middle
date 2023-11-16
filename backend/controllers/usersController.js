@@ -49,6 +49,35 @@ const getInvestors = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get users
+// Route    Get /api/users/investors
+// Access   Private
+const getPublishedInvestors = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find({ role: "Investor" }).populate("details");
+    const published = [];
+
+    users.forEach((u) => {
+      if (u.details != null) {
+        if (u.details.published) {
+          published.push(u);
+        }
+      }
+    });
+
+    // res.status(200).json({
+    //   message: "Investors found successfully",
+    //   users: users,
+    // });
+    res.send("Hello");
+  } catch (error) {
+    res.status(400).json({
+      error: error,
+    });
+    // throw new Error("Failed to get enterpreneurs");
+  }
+});
+
 // @desc    Get user
 // Route    Get /api/users/:id
 // Access   Private
@@ -232,6 +261,7 @@ export {
   getUsers,
   getEnterpreneurs,
   getInvestors,
+  getPublishedInvestors,
   getUser,
   setUser,
   updateUser,

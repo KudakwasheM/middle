@@ -3,6 +3,7 @@ import {
   deleteUser,
   getEnterpreneurs,
   getInvestors,
+  getPublishedInvestors,
   getUser,
   getUsers,
   setUser,
@@ -44,5 +45,8 @@ router.route("/activate/:id").put(protect, toggleActivate);
 
 //Subscribe
 router.route("/subscribe/:id").put(protect, toggleSubscribe);
+
+//Published Investors
+router.route("/investors/published").get(getPublishedInvestors);
 
 export default router;
