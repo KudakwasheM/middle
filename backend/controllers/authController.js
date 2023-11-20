@@ -237,7 +237,7 @@ const registerEmail = asyncHandler(async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
 
-      const mail = `Good day ${user.name}, \n\nThank you for joining us at Capedia. To verify your email use the link below. \n\n${process.env.BASE_URL}/verified/${user._id}/${token.token}`;
+      const mail = `Good day ${user.name}, \n\nThank you for joining us at Capedia. To verify your email use the link below. \n\n${process.env.BASE_URL}/account/${user._id}/${token.token}/verification`;
       await sendEmail(user.email, "Verify Email", mail);
 
       res.status(201).json({
