@@ -51,7 +51,7 @@ app.use("/api/details", projectDetailRoutes);
 app.use("/api/members", teamMemberRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/users/image", profileRoutes);
-app.use("/api/profile", enterpreneurRoutes);
+app.use("/api/enterpreneur", enterpreneurRoutes);
 app.use("/api/investors/details", investorDetailsRoutes);
 app.use("/api/test", testRoutes);
 // app.use("/api/images");

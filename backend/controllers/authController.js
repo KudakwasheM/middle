@@ -4,6 +4,7 @@ import User from "../models/userModel.js";
 import Token from "../models/tokenModel.js";
 import sendEmail from "../config/sendEmail.js";
 import crypto from "crypto";
+import { CLIENT_RENEG_WINDOW } from "tls";
 
 //@desc     Auth user/set token
 //route     POST /api/login
@@ -236,8 +237,8 @@ const registerEmail = asyncHandler(async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
 
-      const url = `Good day ${user.name}, \n\nThank you for joining us at Capedia. To verify your email use the link below. \n\n${process.env.BASE_URL}/verified/${user._id}/${token.token}`;
-      await sendEmail(user.email, "Verify Email", url);
+      const mail = `Good day ${user.name}, \n\nThank you for joining us at Capedia. To verify your email use the link below. \n\n${process.env.BASE_URL}/verified/${user._id}/${token.token}`;
+      await sendEmail(user.email, "Verify Email", mail);
 
       res.status(201).json({
         message: "An email was sent to your account. Please verify.",
@@ -256,7 +257,6 @@ const registerEmail = asyncHandler(async (req, res) => {
 const verifyAccount = asyncHandler(async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }).select("-password");
-    console.log(user);
 
     if (!user) {
       return res.status(401).send({
@@ -268,7 +268,6 @@ const verifyAccount = asyncHandler(async (req, res) => {
       userId: user._id,
       token: req.params.token,
     });
-    console.log(token);
 
     if (!token) {
       return res.status(401).send({
@@ -287,8 +286,85 @@ const verifyAccount = asyncHandler(async (req, res) => {
       message: "Email verified successfully",
     });
   } catch (error) {
-    console.log("Failed");
-    res.status(500).send({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+//desc      Forgot Password
+//route     Post /api/forgot-password
+//access    Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    const token = new Token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    });
+
+    await token.save();
+
+    const mail = `Good day ${user.name}, \n\nClick the link below to reset your password. \n\nlocalhost:3000/reset/${user._id}/${token.token}`;
+    await sendEmail(user.email, "Reset Password", mail);
+
+    res.status(200).json({
+      message: "Email sent",
+    });
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+    throw new Error("An error occured");
+  }
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.params.id }).select(
+      "-password"
+    );
+
+    const { password } = req.body;
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Invalid link",
+      });
+    }
+
+    user.password = password;
+
+    const reset = await user.save();
+
+    if (reset) {
+      console.log(password);
+      await token.deleteOne({ _id: token._id });
+    }
+
+    res.status(200).json({
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+    throw new Error("Internal Server Error");
   }
 });
 
@@ -300,4 +376,6 @@ export {
   logout,
   profile,
   updateUser,
+  forgotPassword,
+  resetPassword,
 };

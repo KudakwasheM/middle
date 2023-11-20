@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import Project from "../models/projectModel.js";
 
 const getProfile = asyncHandler(async (req, res) => {
   try {
@@ -51,7 +52,19 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const getProjects = asyncHandler(async (req, res) => {
-  const user = User.findById(req.params.id);
+  try {
+    const projects = await Project.find({ enterpreneur: req.params.user });
+    res.status(200).json({
+      message: "Retrieved projects successfully",
+      projects: projects,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+    throw new Error("An error occured");
+  }
 });
 
-export { getProfile, changePassword };
+export { getProjects, getProfile, changePassword };
