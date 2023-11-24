@@ -40,10 +40,13 @@ const saveProfile = asyncHandler(async (req, res) => {
         await userDP.save();
       }
 
-      res.status(200).json({
-        profile: userDP,
-        message: "Profile uploaded successfully",
-      });
+      res
+        .status(200)
+        .json({
+          success: true,
+          profile: userDP,
+          message: "Profile uploaded successfully",
+        });
     } else {
       throw new Error("Failed to move the file");
     }
@@ -75,7 +78,7 @@ const saveProfile = asyncHandler(async (req, res) => {
 //       //   user_id: user_id,
 //       // });
 
-//       // res.status(200).json({
+//       // res.status(200).json({ success:true,
 //       //   profile: userDP,
 //       //   message: "Profile uploaded successfully",
 //       // });
@@ -99,7 +102,7 @@ const saveProfile = asyncHandler(async (req, res) => {
 //       //   user_id: user_id,
 //       // });
 
-//       // res.status(200).json({
+//       // res.status(200).json({ success:true,
 //       //   profile: userDP,
 //       //   message: "Profile uploaded successfully",
 //       // });

@@ -13,10 +13,13 @@ const getTeamMembers = asyncHandler(async (req, res) => {
     throw new Error("Members not found");
   }
 
-  res.status(200).json({
-    members: members,
-    message: "Team members found successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      members: members,
+      message: "Team members found successfully",
+    });
 });
 
 // @desc    Get detail on project
@@ -30,10 +33,13 @@ const getMember = asyncHandler(async (req, res) => {
     throw new Error("Member not found");
   }
 
-  res.status(200).json({
-    member: member,
-    message: "Member found successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      member: member,
+      message: "Member found successfully",
+    });
 });
 
 // @desc    Set member
@@ -101,11 +107,14 @@ const updateMember = asyncHandler(async (req, res) => {
 
     const updatedMember = await member.save();
 
-    res.status(200).json({
-      name: updatedMember.name,
-      description: updatedMember.description,
-      position: updatedMember.position,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        name: updatedMember.name,
+        description: updatedMember.description,
+        position: updatedMember.position,
+      });
   } else {
     res.status(404);
     throw new Error("Member not found");
@@ -123,14 +132,26 @@ const deleteMember = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
+  const project = await Project.findById(member.project_id);
+
+  const memberIndex = project.members.indexOf(member._id);
+  if (memberIndex > -1) {
+    project.members.splice(memberIndex, 1);
+  }
+
+  await project.save();
+
   await TeamMember.deleteOne({ _id: member._id });
 
   const members = await TeamMember.find();
-  res.status(200).json({
-    id: req.params.id,
-    members: members,
-    message: "Team member deleted successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      id: req.params.id,
+      members: members,
+      message: "Team member deleted successfully",
+    });
 });
 
 export { getTeamMembers, setMember, getMember, updateMember, deleteMember };

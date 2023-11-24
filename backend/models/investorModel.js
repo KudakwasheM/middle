@@ -26,6 +26,10 @@ const investorSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    published: {
+      type: Boolean,
+      default: false,
+    },
     locations: {
       type: [String],
     },

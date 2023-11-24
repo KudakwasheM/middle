@@ -34,10 +34,9 @@ const saveFileToDB = asyncHandler(async (req, res) => {
 
     // await newFile.save();
     console.log("File saved to MongoDB");
-    res.status(200).json({
-      file: newFile,
-      message: "File saved to MongoDB",
-    });
+    res
+      .status(200)
+      .json({ success: true, file: newFile, message: "File saved to MongoDB" });
   } catch (err) {
     res.status(500);
     throw new Error("Error saving file to MongoDB:", err);

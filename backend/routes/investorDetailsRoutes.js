@@ -1,9 +1,10 @@
 import express from "express";
-import { protect } from "../middlewares/authMiddleware.js";
+import { admin, protect } from "../middlewares/authMiddleware.js";
 import {
   deleteDetail,
   getDetail,
   getInvestorDetail,
+  publishDetails,
   setDetail,
   updateDetail,
 } from "../controllers/investorDetailsController.js";
@@ -17,5 +18,6 @@ router
   .put(protect, updateDetail)
   .delete(protect, deleteDetail);
 router.route("/u/:investor").get(protect, getInvestorDetail);
+router.route("/:id/publish").post(admin, publishDetails);
 
 export default router;

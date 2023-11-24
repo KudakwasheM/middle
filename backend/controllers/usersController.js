@@ -7,10 +7,9 @@ import User from "../models/userModel.js";
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find();
 
-  res.status(200).json({
-    message: "Users found successfully",
-    users: users,
-  });
+  res
+    .status(200)
+    .json({ success: true, message: "Users found successfully", users: users });
 });
 
 // @desc    Get users
@@ -20,10 +19,13 @@ const getEnterpreneurs = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({ role: "Enterpreneur" });
 
-    res.status(200).json({
-      message: "Enterpreneurs found successfully",
-      users: users,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Enterpreneurs found successfully",
+        users: users,
+      });
   } catch (error) {
     res.status(400);
     throw new Error("Failed to get enterpreneurs");
@@ -37,10 +39,13 @@ const getInvestors = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({ role: "Investor" }).populate("details");
 
-    res.status(200).json({
-      message: "Investors found successfully",
-      users: users,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Investors found successfully",
+        users: users,
+      });
   } catch (error) {
     res.status(400).json({
       error: error,
@@ -50,31 +55,26 @@ const getInvestors = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get users
-// Route    Get /api/users/investors
-// Access   Private
+// Route    Get /api/users/investors/published
+// Access   Public
 const getPublishedInvestors = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({ role: "Investor" }).populate("details");
-    const published = [];
 
-    users.forEach((u) => {
-      if (u.details != null) {
-        if (u.details.published) {
-          published.push(u);
-        }
-      }
-    });
+    const published = users.filter((u) => u.details && u.details.published);
 
-    // res.status(200).json({
-    //   message: "Investors found successfully",
-    //   users: users,
-    // });
-    res.send("Hello");
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Investors found successfully",
+        users: published,
+      });
   } catch (error) {
-    res.status(400).json({
-      error: error,
+    res.status(500).json({
+      message: "Internal server error",
     });
-    // throw new Error("Failed to get enterpreneurs");
+    throw new Error("Failed to get enterpreneurs");
   }
 });
 
@@ -89,11 +89,14 @@ const getUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  res.status(200).json({
-    user: user,
-    hello: "Hello",
-    message: "User found successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      user: user,
+      hello: "Hello",
+      message: "User found successfully",
+    });
 });
 
 // @desc    Set user
@@ -170,14 +173,17 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      active: updatedUser.active,
-      role: updatedUser.role,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        active: updatedUser.active,
+        role: updatedUser.role,
+      });
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -196,14 +202,17 @@ const toggleActivate = asyncHandler(async (req, res) => {
     user.active = !user.active;
     const updatedUser = await user.save();
 
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      active: updatedUser.active,
-      role: updatedUser.role,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        active: updatedUser.active,
+        role: updatedUser.role,
+      });
   } catch (err) {
     res.status(500);
     throw new Error("Failed to activate user");
@@ -222,14 +231,17 @@ const toggleSubscribe = asyncHandler(async (req, res) => {
     user.subscribed = !user.subscribed;
     const updatedUser = await user.save();
     console.log(updateUser);
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      active: updatedUser.active,
-      role: updatedUser.role,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        active: updatedUser.active,
+        role: updatedUser.role,
+      });
   } catch (err) {
     res.status(500);
     throw new Error("Failed to activate user");
@@ -250,11 +262,14 @@ const deleteUser = asyncHandler(async (req, res) => {
   await User.deleteOne({ _id: user._id });
 
   const users = await User.find();
-  res.status(200).json({
-    id: req.params.id,
-    users: users,
-    message: "Users deleted successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      id: req.params.id,
+      users: users,
+      message: "Users deleted successfully",
+    });
 });
 
 export {

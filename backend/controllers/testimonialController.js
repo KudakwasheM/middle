@@ -8,10 +8,13 @@ const getTestimonials = asyncHandler(async (req, res) => {
   try {
     const testimonials = await Testimonial.find();
 
-    res.status(200).json({
-      message: "Testimonials found successfully",
-      testimonials: testimonials,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Testimonials found successfully",
+        testimonials: testimonials,
+      });
   } catch (err) {
     res.status(400).json({
       error: err,
@@ -31,10 +34,13 @@ const getTestimonial = asyncHandler(async (req, res) => {
       throw new Error("Testimonial not found");
     }
 
-    res.status(200).json({
-      Testimonial: Testimonial,
-      message: "Testimonial found successfully",
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        Testimonial: Testimonial,
+        message: "Testimonial found successfully",
+      });
   } catch (error) {
     res.status(400).json({
       error: error,
@@ -81,11 +87,14 @@ const updateTestimonial = asyncHandler(async (req, res) => {
 
     const updatedTestimonial = await Testimonial.save();
 
-    res.status(200).json({
-      _id: updatedTestimonial._id,
-      name: updatedTestimonial.name,
-      testimonial: updatedTestimonial.testimonial,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        _id: updatedTestimonial._id,
+        name: updatedTestimonial.name,
+        testimonial: updatedTestimonial.testimonial,
+      });
   } else {
     res.status(404);
     throw new Error("Testimonial not found");
@@ -106,11 +115,14 @@ const deleteTestimonial = asyncHandler(async (req, res) => {
   await testimonial.deleteOne({ _id: testimonial._id });
 
   const testimonials = await Testimonial.find();
-  res.status(200).json({
-    id: req.params.id,
-    testimonials: testimonials,
-    message: "Testimonial deleted successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      id: req.params.id,
+      testimonials: testimonials,
+      message: "Testimonial deleted successfully",
+    });
 });
 
 export {

@@ -159,7 +159,7 @@ const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(0),
   });
-  res.status(200).json({ message: "User logged out" });
+  res.status(200).json({ success: true, message: "User logged out" });
 });
 
 //@desc     Get user profile
@@ -195,14 +195,17 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.status(200).json({
-      _id: req.user._id,
-      name: req.user.name,
-      username: req.user.username,
-      email: req.user.email,
-      active: req.user.active,
-      role: req.user.role,
-    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        _id: req.user._id,
+        name: req.user.name,
+        username: req.user.username,
+        email: req.user.email,
+        active: req.user.active,
+        role: req.user.role,
+      });
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -282,9 +285,9 @@ const verifyAccount = asyncHandler(async (req, res) => {
     );
     await token.deleteOne({ _id: token._id });
 
-    res.status(200).json({
-      message: "Email verified successfully",
-    });
+    res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -315,9 +318,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const mail = `Good day ${user.name}, \n\nClick the link below to reset your password. \n\nlocalhost:3000/reset/${user._id}/${token.token}`;
     await sendEmail(user.email, "Reset Password", mail);
 
-    res.status(200).json({
-      message: "Email sent",
-    });
+    res.status(200).json({ success: true, message: "Email sent" });
   } catch (error) {
     console.error("Error in forgotPassword:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -359,9 +360,9 @@ const resetPassword = asyncHandler(async (req, res) => {
       await token.deleteOne({ _id: token._id });
     }
 
-    res.status(200).json({
-      message: "Password reset successful",
-    });
+    res
+      .status(200)
+      .json({ success: true, message: "Password reset successful" });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
     throw new Error("Internal Server Error");

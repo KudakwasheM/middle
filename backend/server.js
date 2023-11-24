@@ -15,12 +15,12 @@ import teamMemberRoutes from "./routes/teamMemberRoutes.js";
 import testimonialRoutes from "./routes/testimonialRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import enterpreneurRoutes from "./routes/enterpreneurRoutes.js";
-import testRoutes from "./routes/testRoutes.js";
 import investorDetailsRoutes from "./routes/investorDetailsRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import fileUpload from "express-fileupload";
 
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
+const port = 8000;
 
 connectDB();
 
@@ -53,7 +53,6 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/users/image", profileRoutes);
 app.use("/api/enterpreneur", enterpreneurRoutes);
 app.use("/api/investors/details", investorDetailsRoutes);
-app.use("/api/test", testRoutes);
 // app.use("/api/images");
 
 app.use(notFound);

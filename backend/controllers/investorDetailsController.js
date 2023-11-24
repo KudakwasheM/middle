@@ -16,6 +16,7 @@ const getInvestorDetail = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({
+    success: true,
     detail: detail,
     message: "Details found successfully",
   });
@@ -33,6 +34,7 @@ const getDetail = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({
+    success: true,
     details: details,
     message: "Details found successfully",
   });
@@ -126,6 +128,7 @@ const updateDetail = asyncHandler(async (req, res) => {
     const updatedDetail = await detail.save();
 
     res.status(200).json({
+      success: true,
       details: detail,
       message: "Successfully updated details",
     });
@@ -157,6 +160,7 @@ const deleteDetail = asyncHandler(async (req, res) => {
 
     const details = await InvestorDetail.find();
     res.status(200).json({
+      success: true,
       id: req.params.id,
       details: details,
       message: "Details deleted successfully",
@@ -167,4 +171,41 @@ const deleteDetail = asyncHandler(async (req, res) => {
   }
 });
 
-export { getInvestorDetail, getDetail, setDetail, updateDetail, deleteDetail };
+const publishDetails = asyncHandler(async (req, res) => {
+  try {
+    const detail = await InvestorDetail.findById(req.params.id);
+
+    if (!detail) {
+      res.status(404).json({ message: "Investor details not found" });
+    }
+
+    detail.published = !detail.published;
+
+    await detail.save();
+
+    if (!detail.published) {
+      res.status(200).json({
+        success: true,
+        message: "Successfully repudiated details",
+        detail: detail,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Successfully published details",
+      detail: detail,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to publish project");
+  }
+});
+
+export {
+  getInvestorDetail,
+  getDetail,
+  setDetail,
+  updateDetail,
+  deleteDetail,
+  publishDetails,
+};

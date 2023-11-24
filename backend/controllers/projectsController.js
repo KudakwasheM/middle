@@ -10,9 +10,10 @@ const getProjects = asyncHandler(async (req, res) => {
     .populate("details")
     .populate("funds")
     .populate("members")
-    .populate("enterpreneur");
+    .populate({ path: "enterpreneur", select: "-password" });
 
   res.status(200).json({
+    success: true,
     projects: projects,
     message: "Successfully retrieved projects",
   });
@@ -82,6 +83,7 @@ const getProject = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({
+    success: true,
     project: project,
     message: "Project found successfully",
   });
@@ -107,6 +109,7 @@ const updateProject = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json({
+    success: true,
     project: updatedProject,
     message: "Project updated successfully",
   });
@@ -124,6 +127,7 @@ const getPublishedProjects = asyncHandler(async (req, res) => {
       .populate("enterpreneur");
 
     res.status(200).json({
+      success: true,
       projects: projects,
       message: "Successfully retrieved projects",
     });
@@ -148,16 +152,25 @@ const deleteProject = asyncHandler(async (req, res) => {
       throw new Error("Project not found");
     }
 
-    await ProjectDetails.deleteOne({ project_id: project._id });
-
-    await Project.deleteOne({ _id: project._id });
-
-    const projects = await Project.find();
-    res.status(200).json({
-      id: req.params.id,
-      projects: projects,
-      message: "Project removed successfully",
+    const deleteProject = await ProjectDetails.deleteOne({
+      project_id: project._id,
     });
+
+    if (deleteProject) {
+      await Project.deleteOne({ _id: project._id });
+
+      const projects = await Project.find();
+      res.status(200).json({
+        success: true,
+        id: req.params.id,
+        projects: projects,
+        message: "Project removed successfully",
+      });
+    } else {
+      res.status(500).json({
+        message: "Failed to delete project",
+      });
+    }
   } catch (error) {
     res.status(500);
     throw new Error("Failed to delete project");
@@ -172,16 +185,20 @@ const publishProject = asyncHandler(async (req, res) => {
       res.status(404).json({ success: false, error: "Project not found" });
     }
 
-    if (project.published) {
-      console.log(project);
-      project.published = false;
-    } else {
-      project.published = true;
-    }
+    project.published = !project.published;
 
     await project.save();
 
+    if (!project.published) {
+      res.status(200).json({
+        success: true,
+        message: "Successfully repudiated project",
+        project: project,
+      });
+    }
+
     res.status(200).json({
+      success: true,
       message: "Successfully published project",
       project: project,
     });

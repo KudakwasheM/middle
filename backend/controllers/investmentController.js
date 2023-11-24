@@ -7,10 +7,13 @@ import Investment from "../models/investmentModel.js";
 const getInvestments = asyncHandler(async (req, res) => {
   const investments = await Investment.find();
 
-  res.status(200).json({
-    investments: investments,
-    message: "Successfully retrieved investments",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      investments: investments,
+      message: "Successfully retrieved investments",
+    });
 });
 
 // @desc    Get investments
@@ -46,10 +49,13 @@ const getInvestment = asyncHandler(async (req, res) => {
     throw new Error("Investment not found");
   }
 
-  res.status(200).json({
-    investment: investment,
-    message: "Investment found successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      investment: investment,
+      message: "Investment found successfully",
+    });
 });
 
 const updateInvestment = asyncHandler(async (req, res) => {
@@ -67,12 +73,15 @@ const updateInvestment = asyncHandler(async (req, res) => {
 
   const updatedInvestment = await investment.save();
 
-  res.status(200).json({
-    id: updatedInvestment._id,
-    amount: updateInvestment.amount,
-    remaining: updateInvestment.remaining,
-    project_types: updateInvestment.project_types,
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      id: updatedInvestment._id,
+      amount: updateInvestment.amount,
+      remaining: updateInvestment.remaining,
+      project_types: updateInvestment.project_types,
+    });
 });
 
 const deleteInvestment = asyncHandler(async (req, res) => {
@@ -85,11 +94,14 @@ const deleteInvestment = asyncHandler(async (req, res) => {
   await Investment.deleteOne({ _id: investment._id });
 
   const investments = await Investment.find();
-  res.status(200).json({
-    id: req.params.id,
-    investments: investments,
-    message: "Investment removed successfully",
-  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      id: req.params.id,
+      investments: investments,
+      message: "Investment removed successfully",
+    });
 });
 
 export {
