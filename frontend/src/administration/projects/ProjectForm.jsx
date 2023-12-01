@@ -72,7 +72,6 @@ const ProjectForm = () => {
     await axiosClient
       .get(`/projects/${id}`)
       .then((res) => {
-        console.log(res?.data?.project);
         setProj(res?.data?.project);
         const retrievedProject = res?.data?.project;
         const details = retrievedProject.details;
@@ -125,22 +124,12 @@ const ProjectForm = () => {
       });
   };
 
-  // const setLoad = () => {
-  //   let users = enterpreneurs;
-  //   console.log(users);
-  //   for (let i = 0; i <= users.length; i++) {
-  //     console.log(users[i]);
-  //   }
-  //   // users.forEach((u) => {
-  //   //   const nigga = { value: u._id, label: u.name };
-  //   //   setData((data) => [...data, nigga]);
-  //   //   console.log(data);
-  //   // });
-  // };
-
   const saveProject = async (e) => {
     e.preventDefault();
     if (id) {
+      if (userInfo.role == "Enterpreneur") {
+        proj.enterpreneur = userInfo._id;
+      }
       setLoadProject(true);
       await axiosClient
         .put(`/projects/${id}`, proj)
@@ -154,6 +143,9 @@ const ProjectForm = () => {
         });
     } else {
       setLoadProject(true);
+      if (userInfo.role == "Enterpreneur") {
+        proj.enterpreneur = userInfo._id;
+      }
       await axiosClient
         .post("/projects", proj)
         .then((res) => {
@@ -184,7 +176,6 @@ const ProjectForm = () => {
         });
     } else {
       setLoadDetails(true);
-      console.log(details);
       await axiosClient
         .post(`/details`, details)
         .then((res) => {
@@ -202,6 +193,9 @@ const ProjectForm = () => {
   const saveMember = async (e) => {
     e.preventDefault();
     setLoadMember(true);
+    if (proj._id != "") {
+      teamMember.project_id = proj._id;
+    }
     await axiosClient
       .post("/members", teamMember)
       .then((res) => {
@@ -237,8 +231,6 @@ const ProjectForm = () => {
 
   useEffect(() => {
     getEnterpreneurs();
-    // setLoad();
-    console.log(proj);
   }, []);
 
   return (
@@ -506,15 +498,15 @@ const ProjectForm = () => {
                       return (
                         <div className="w-full grid grid-cols-4 mb-2 border-b">
                           <div className="col-span-3 ">
-                            <div className="flex">
+                            <div className="flex gap-2">
                               <p className="w-[25%]">Name</p>
                               <p className="font-semibold">{member.name}</p>
                             </div>
-                            <div className="flex">
+                            <div className="flex gap-2">
                               <p className="w-[25%]">Position</p>
                               <p className="font-semibold">{member.position}</p>
                             </div>
-                            <div className="flex">
+                            <div className="flex gap-2">
                               <p className="w-[25%]">Description</p>
                               <p className="font-semibold">
                                 {member.description}
@@ -554,7 +546,7 @@ const ProjectForm = () => {
 
                     <div className={`${hidden ? "mt-5" : "hidden"}`}>
                       <h2 className="text-xl font-semibold mb-3 text-[rgba(0,223,154,0.65)]">
-                        Add Memmber
+                        Add Member
                       </h2>
                       <div className="flex flex-col mb-2">
                         <label htmlFor="">Name</label>
@@ -672,7 +664,7 @@ const ProjectForm = () => {
                       </div>
                       <div className="flex-col mb-2 hidden">
                         <label htmlFor="">Project</label>
-                        <input type="text" disabled value={proj._id} />
+                        <input type="text" value={proj._id} />
                       </div>
                       {/* {usersSelect} */}
                       <div className="">

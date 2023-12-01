@@ -18,6 +18,6 @@ router
   .put(protect, updateDetail)
   .delete(protect, deleteDetail);
 router.route("/u/:investor").get(protect, getInvestorDetail);
-router.route("/:id/publish").post(admin, publishDetails);
+router.route("/:id/publish").put(admin, publishDetails);
 
 export default router;

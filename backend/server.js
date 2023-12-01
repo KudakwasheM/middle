@@ -16,6 +16,8 @@ import testimonialRoutes from "./routes/testimonialRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import enterpreneurRoutes from "./routes/enterpreneurRoutes.js";
 import investorDetailsRoutes from "./routes/investorDetailsRoutes.js";
+import projectDocumentRoutes from "./routes/projectDocumentRoutes.js";
+import testRoutes from "./routes/testRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import fileUpload from "express-fileupload";
 
@@ -53,6 +55,8 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/users/image", profileRoutes);
 app.use("/api/enterpreneur", enterpreneurRoutes);
 app.use("/api/investors/details", investorDetailsRoutes);
+app.use("/api/documents", projectDocumentRoutes);
+app.use("/api/test", testRoutes);
 // app.use("/api/images");
 
 app.use(notFound);

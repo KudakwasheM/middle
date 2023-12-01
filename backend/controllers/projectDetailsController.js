@@ -10,19 +10,15 @@ import path, { basename } from "path";
 const getProjectDetail = asyncHandler(async (req, res) => {
   try {
     const detail = await ProjectDetails.findOne({ project_id: req.params.id });
-    console.log(detail);
     if (!detail) {
-      console.log(detail);
       res.status(400);
       throw new Error("Details not found");
     }
-    res
-      .status(200)
-      .json({
-        success: true,
-        detail: detail,
-        message: "Details found successfully",
-      });
+    res.status(200).json({
+      success: true,
+      detail: detail,
+      message: "Details found successfully",
+    });
   } catch (error) {
     res.status(500);
     throw new Error(error.message || "Server error");
@@ -40,13 +36,11 @@ const getDetail = asyncHandler(async (req, res) => {
     throw new Error("Details not found");
   }
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      details: details,
-      message: "Details found successfully",
-    });
+  res.status(200).json({
+    success: true,
+    details: details,
+    message: "Details found successfully",
+  });
 });
 
 // @desc    Set detail
@@ -95,7 +89,7 @@ const setDetail = asyncHandler(async (req, res) => {
         { details: detail._id },
         { new: true }
       );
-      console.log(detail);
+
       if (project) {
         res.status(201).json({
           id: detail._id,
@@ -147,13 +141,11 @@ const uploadFiles = asyncHandler(async (req, res) => {
       });
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        files: uploadedFiles,
-        message: "Files uploaded successfully",
-      });
+    res.status(200).json({
+      success: true,
+      files: uploadedFiles,
+      message: "Files uploaded successfully",
+    });
   } catch (err) {
     console.error("Error uploading files: ", err);
     res.status(500).json({
@@ -177,17 +169,15 @@ const updateDetail = asyncHandler(async (req, res) => {
 
     const updatedDetail = await detail.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        id: updatedDetail._id,
-        short_summary: updatedDetail.short_summary,
-        description: updatedDetail.description,
-        progress: updatedDetail.progress,
-        advantages: updatedDetail.advantages,
-        deal: updatedDetail.deal,
-      });
+    res.status(200).json({
+      success: true,
+      id: updatedDetail._id,
+      short_summary: updatedDetail.short_summary,
+      description: updatedDetail.description,
+      progress: updatedDetail.progress,
+      advantages: updatedDetail.advantages,
+      deal: updatedDetail.deal,
+    });
   } else {
     res.status(404);
     throw new Error("Details not found");
@@ -229,14 +219,12 @@ const deleteDetail = asyncHandler(async (req, res) => {
   await ProjectDetails.deleteOne({ _id: detail._id });
 
   const details = await ProjectDetails.find();
-  res
-    .status(200)
-    .json({
-      success: true,
-      id: req.params.id,
-      details: details,
-      message: "Details deleted successfully",
-    });
+  res.status(200).json({
+    success: true,
+    id: req.params.id,
+    details: details,
+    message: "Details deleted successfully",
+  });
 });
 
 export {

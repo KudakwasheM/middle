@@ -3,6 +3,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { BsPencil } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import axiosClient from "../../axiosClient";
+import moment from "moment";
 
 const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -29,7 +30,6 @@ const Profile = () => {
       .get(`/users/${userInfo._id}`)
       .then((res) => {
         setLoading(false);
-        console.log(res?.data?.user);
         setUser(res?.data?.user);
       })
       .catch((err) => {
@@ -63,7 +63,9 @@ const Profile = () => {
         <div className="p-3 sm:p-5 border hover:shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] flex flex-col">
           <div className="flex sm:mb-10 justify-between">
             <h2 className="font-semibold text-xl sm:text-3xl">Profile</h2>
-            <h3 className="font-semibold text-sm">Joined in 2023</h3>
+            <h3 className="font-semibold text-sm">
+              Joined in {moment(userInfo.createdAt).format("ll")}
+            </h3>
           </div>
           <div className="flex">
             {profile ? (

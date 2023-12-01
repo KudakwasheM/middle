@@ -2,8 +2,15 @@ import asyncHandler from "express-async-handler";
 import fs from "fs";
 import Test from "../models/testModel.js";
 import Datauri from "datauri";
+import path from "path";
 
 const uploadConvert = asyncHandler(async (req, res) => {});
+
+const toBase64 = (filepath) => {
+  const file = fs.readFileSync(filepath);
+
+  return Buffer.from(file).toString("base64");
+};
 
 const saveFileToDB = asyncHandler(async (req, res) => {
   const auth = req.user._id;
@@ -22,9 +29,11 @@ const saveFileToDB = asyncHandler(async (req, res) => {
       }
     }
 
-    const imagePath = path.join(basePath, file.name);
+    const filePath = path.join(basePath, file.name);
 
-    await file.mv(imagePath);
+    await file.mv(filePath);
+
+    const base64Data = toBase64(filePath);
 
     const newFile = await Test.create({
       data: base64Data,
@@ -32,8 +41,6 @@ const saveFileToDB = asyncHandler(async (req, res) => {
       mimetype: file.mimetype,
     });
 
-    // await newFile.save();
-    console.log("File saved to MongoDB");
     res
       .status(200)
       .json({ success: true, file: newFile, message: "File saved to MongoDB" });

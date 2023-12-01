@@ -195,17 +195,15 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        _id: req.user._id,
-        name: req.user.name,
-        username: req.user.username,
-        email: req.user.email,
-        active: req.user.active,
-        role: req.user.role,
-      });
+    res.status(200).json({
+      success: true,
+      _id: req.user._id,
+      name: req.user.name,
+      username: req.user.username,
+      email: req.user.email,
+      active: req.user.active,
+      role: req.user.role,
+    });
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -356,7 +354,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     const reset = await user.save();
 
     if (reset) {
-      console.log(password);
       await token.deleteOne({ _id: token._id });
     }
 

@@ -59,6 +59,12 @@ const projectSchema = mongoose.Schema(
         ref: "Fund",
       },
     ],
+    documents: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Document",
+      },
+    ],
     investors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
