@@ -9,6 +9,8 @@ import {
 } from "../controllers/projectDocumentController.js";
 import { GridFsStorage } from "multer-gridfs-storage";
 import multer from "multer";
+import crypto from "crypto";
+import path from "path";
 
 const router = express.Router();
 
@@ -18,18 +20,25 @@ const mongoUri =
 const storage = new GridFsStorage({
   url: mongoUri,
   file: (req, file) => {
-    console.log(JSON.parse(JSON.stringify(req.body)));
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        console.log(JSON.parse(JSON.stringify(req.body)));
+        console.log(req.body);
+        const filename = buf.toString("hex") + path.extname(file.originalname);
 
-    console.log(req.body);
-    const filename = `${file.originalname}`;
-
-    return {
-      filename: filename,
-      metadata: {
-        project_id: req.params.project,
-      },
-      bucketName: "docsets",
-    };
+        const fileInfo = {
+          filename: filename,
+          metadata: {
+            project_id: req.params.project,
+          },
+          bucketName: "docsets",
+        };
+        resolve(fileInfo);
+      });
+    });
   },
 });
 
@@ -41,6 +50,6 @@ router
   .post(protect, upload.single("document"), setProjectDocuments);
 router.route("/:id").delete(protect, deleteProjectDocument);
 router.route("/project/create/:project").post(protect, createProjectDocument);
-router.route("/project/:project_id/:file_id").get(protect, showfile);
+router.route("/project/:project_id/:filename").get(protect, showfile);
 
 export default router;

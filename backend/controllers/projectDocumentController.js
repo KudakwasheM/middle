@@ -57,7 +57,7 @@ const showfile = async (req, res) => {
 
   res.type("application/pdf");
   bucket.open;
-  bucket.openDownloadStream(req.params.file_id).pipe(res);
+  bucket.openDownloadStreamByName(req.params.filename).pipe(res);
 };
 
 const setProjectDocuments = asyncHandler(async (req, res) => {

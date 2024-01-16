@@ -11,6 +11,7 @@ const Project = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const [project, setProject] = useState({});
   const [documents, setDocuments] = useState([]);
+  const [filename, setFilename] = useState("");
   const [loading, setLoading] = useState(false);
 
   const getProject = async () => {
@@ -52,7 +53,11 @@ const Project = () => {
       });
   };
 
-  const openfile = async (e) => {};
+  const openfile = async (file) => {
+    await axiosClient.get(`/documents/project/${id}/${file}`).then((res) => {
+      console.log(res);
+    });
+  };
 
   useEffect(() => {
     getProject();
@@ -169,11 +174,11 @@ const Project = () => {
               <div className="p-3 border mb-5">
                 <h3 className="font-semibold text-xl mb-2">Documents</h3>
                 {documents.length > 0 ? (
-                  <div className="flex ml-2 gap-5">
+                  <div className="flex flex-wrap ml-2 gap-5">
                     {documents.map((d) => {
                       return (
                         <button
-                          onClick={openfile}
+                          onClick={() => openfile(d.filename)}
                           className="p-1 rounded-full border"
                         >
                           <p className="text-sm">{d.filename}</p>
