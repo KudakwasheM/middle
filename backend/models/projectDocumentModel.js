@@ -27,6 +27,6 @@ const documentSchema = mongoose.Schema(
   }
 );
 
-const Document = mongoose.model("document", documentSchema);
+const Document = mongoose.model("Document", documentSchema);
 
 export default Document;

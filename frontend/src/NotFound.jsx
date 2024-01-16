@@ -13,7 +13,7 @@ const NotFound = () => {
       </div>
       <div className="mt-2">
         <button
-          className="bg-sky-500 py-3 px-5 text-white text-xl mt-3"
+          className="bg-[rgb(0,223,154)] py-2 px-5 text-white text-xl mt-3 rounded-full"
           onClick={() => navigate(-1)}
         >
           Go back

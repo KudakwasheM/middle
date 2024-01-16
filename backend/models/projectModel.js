@@ -59,12 +59,12 @@ const projectSchema = mongoose.Schema(
         ref: "Fund",
       },
     ],
-    documents: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Document",
-      },
-    ],
+    // documents: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Docsets",
+    //   },
+    // ],
     investors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {

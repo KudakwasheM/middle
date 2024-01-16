@@ -10,6 +10,7 @@ const getProjects = asyncHandler(async (req, res) => {
     .populate("details")
     .populate("funds")
     .populate("members")
+    // .populate("documents")
     .populate({ path: "enterpreneur", select: "-password" });
 
   res.status(200).json({
@@ -75,7 +76,9 @@ const getProject = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id)
     .populate("details")
     .populate("funds")
-    .populate("members");
+    .populate("members")
+    // .populate("documents")
+    .populate({ path: "enterpreneur", select: "-password" });
 
   if (!project) {
     res.status(400);
@@ -124,7 +127,7 @@ const getPublishedProjects = asyncHandler(async (req, res) => {
       .populate("details")
       .populate("funds")
       .populate("members")
-      .populate("enterpreneur");
+      .populate({ path: "enterpreneur", select: "-password" });
 
     res.status(200).json({
       success: true,

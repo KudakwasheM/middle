@@ -7,8 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from "../Guests/components/Footer";
 import GuestLoader from "../Guests/components/GuestLoader";
 import axiosClient from "../axiosClient";
+import { useSelector } from "react-redux";
 
 const Guests = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   const [projects, setProjects] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [investors, setInvestors] = useState([]);
@@ -38,6 +40,22 @@ const Guests = () => {
 
   useEffect(() => {
     getData();
+    if (!userInfo) {
+      return;
+    } else {
+      const role = userInfo.role;
+      switch (role) {
+        case "Enterpreneur":
+          navigate("/enterpreneur/dashboard");
+          break;
+        case "Investor":
+          navigate("/");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+    }
   }, []);
   return (
     <>

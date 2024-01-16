@@ -41,6 +41,7 @@ import EnterpreneurDash from "./enterprenuer/EnterpreneurDash";
 import MyInvestors from "./enterprenuer/myinvestor/MyInvestors";
 import MyFunds from "./enterprenuer/myfunds/MyFunds";
 import Error from "./Error";
+import Test from "./test/Test";
 
 const router = createBrowserRouter([
   {
@@ -140,6 +141,7 @@ const router = createBrowserRouter([
   { path: "/reset/:id/:token", element: <ResetPassword /> },
   { path: "/account/:id/:token/verification", element: <Verified /> },
   { path: "/verify/account/:id/:token", element: <Verification /> },
+  { path: "/test", element: <Test /> },
   { path: "/error", element: <Error /> },
   { path: "/*", element: <NotFound /> },
 ]);

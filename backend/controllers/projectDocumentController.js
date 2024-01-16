@@ -3,6 +3,20 @@ import Project from "../models/projectModel.js";
 import fs from "fs";
 import path from "path";
 import Document from "../models/projectDocumentModel.js";
+import FileReader from "filereader";
+import mongoose from "mongoose";
+import Grid from "gridfs-stream";
+
+const mongoUri =
+  "mongodb+srv://netoprojects:Neto1012@netocluster.yifesqp.mongodb.net/middle?retryWrites=true&w=majority";
+
+const conn = mongoose.createConnection(mongoUri);
+let gfs;
+
+conn.once("open", () => {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("docsets");
+});
 
 const getProjectDocuments = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.project);
@@ -12,55 +26,113 @@ const getProjectDocuments = asyncHandler(async (req, res) => {
     throw new Error("Project not found");
   }
 
-  const documents = project.documents;
+  const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "docsets",
+  });
 
-  res
-    .status(200)
-    .json({ documents: documents, message: "Successfully found documents" });
+  const docs = bucket
+    .find({ "metadata.project_id": req.params.project })
+    .toArray(); // Convert to array
+
+  const files = await docs; // Await the conversion to array
+
+  if (!files || files.length === 0) {
+    return res.status(200).json({
+      success: false,
+      message: "No files found",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Files found successfully",
+    files: files,
+  });
 });
 
-const toBase64 = (filepath) => {
-  const file = fs.readFileSync(filepath);
+const showfile = async (req, res) => {
+  const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "docsets",
+  });
 
-  return Buffer.from(file).toString("base64");
+  res.type("application/pdf");
+  bucket.open;
+  bucket.openDownloadStream(req.params.file_id).pipe(res);
 };
 
 const setProjectDocuments = asyncHandler(async (req, res) => {
-  const project = await Project.findById(req.params.project);
+  try {
+    const { filename } = req.body;
+    const project_id = req.params.project;
 
-  if (!project) {
-    res.status(404).json({ message: "Project not found" });
-  }
-  const { title } = req.body;
-  const basePath = `./backend/public/documents/${project._id}`;
+    if (project_id === "") {
+      res.status(401).json({
+        message: "Please provide project id",
+      });
+      throw new Error("Please provide project id");
+    }
+    if (filename === "") {
+      res.status(401).json({
+        message: "Please provide filename",
+      });
+      throw new Error("Please provide filename");
+    }
 
-  const documents = Array.isArray(req.files.documents)
-    ? req.files.documents
-    : [req.files.documents];
-  console.log(documents);
-  if (!fs.existsSync(basePath)) {
-    fs.mkdirSync(basePath, { recursive: true });
-  }
-
-  const uploadedDocuments = [];
-  for (const document of documents) {
-    if (document.mimetype !== "application/pdf") {
-      res.status(400).json({
+    if (req.file == undefined) {
+      return res.status(400).json({
         success: false,
-        message: "Only pdf files are allowed",
+        message: "Please add file",
       });
     }
 
+    res.status(200).json({
+      success: true,
+      message: "Document uploaded successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.send("Failed");
+    throw new Error("Please provide filename");
+  }
+});
+
+const getProjectDetails = asyncHandler(async (req, res) => {
+  try {
+    gfs.files
+      .find({ "metadata.project_id": req.params.project })
+      .toArray((err, files) => {
+        if (!files || files.length === 0) {
+          return res.status(404).json({
+            err: "No files found",
+          });
+        }
+
+        res.status(200).json({
+          success: true,
+          message: "Files found successfully",
+          files: files,
+        });
+      });
+  } catch (error) {}
+});
+
+const createProjectDocument = asyncHandler(async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.project);
+    console.log(project);
+
+    if (!project) {
+      res.status(404).json({ message: "Project not found" });
+    }
+    const { title, data, mimetype } = req.body;
+
     const documentName = `${title}_${project.name}`;
-    const filePath = path.join(basePath, documentName);
-    await document.mv(filePath);
-    const base64Data = toBase64(filePath);
 
     const newDocument = await Document.create({
-      title: title,
-      data: base64Data,
+      title,
+      data,
       filename: documentName,
-      mimetype: document.mimetype,
+      mimetype,
       project_id: project._id,
     });
 
@@ -72,33 +144,25 @@ const setProjectDocuments = asyncHandler(async (req, res) => {
       { new: true }
     );
 
-    if (!addDoc || !base64Data || !newDocument) {
-      fs.unlinkSync(filePath, documentName);
-      // await Document.deleteOne({ _id: newDocument._id });
+    if (!addDoc || !data || !newDocument) {
+      const documentIndex = project.documents.indexOf(document._id);
+      if (documentIndex > -1) {
+        project.documents.splice(documentIndex, 1);
+      }
+      await project.save();
+
+      await document.deleteOne({ _id: document._id });
       res.status(500).json({ message: "Failed to save document" });
     }
 
-    fs.unlinkSync(filePath, documentName);
-    uploadedDocuments.push(newDocument);
+    res.status(200).json({
+      documents: newDocument,
+      message: "Document uploaded successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Error");
   }
-
-  res.status(200).json({
-    documents: uploadedDocuments,
-    message: "Document uploaded successfully",
-  });
-});
-
-const tingTest = asyncHandler(async (req, res) => {
-  const { did } = req.body;
-  const project = await Project.findById(req.params.project);
-  const documentIndex = project.documents.indexOf(did);
-
-  if (documentIndex > -1) {
-    project.documents.splice(documentIndex, 1);
-  }
-  project.save();
-
-  res.send("done");
 });
 
 const deleteProjectDocument = asyncHandler(async (req, res) => {
@@ -145,5 +209,6 @@ export {
   getProjectDocuments,
   setProjectDocuments,
   deleteProjectDocument,
-  tingTest,
+  createProjectDocument,
+  showfile,
 };

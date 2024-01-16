@@ -20,6 +20,7 @@ import projectDocumentRoutes from "./routes/projectDocumentRoutes.js";
 import testRoutes from "./routes/testRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import fileUpload from "express-fileupload";
+import bodyParser from "body-parser";
 
 // const port = process.env.PORT || 5000;
 const port = 8000;
@@ -29,9 +30,12 @@ connectDB();
 const app = express();
 
 app.use(express.static("public"));
-app.use(express.json());
-app.use(fileUpload());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(bodyParser.json());
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
+);
+// app.use(fileUpload());
 app.use(
   cors({
     origin: "*",

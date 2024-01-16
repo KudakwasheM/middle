@@ -12,6 +12,7 @@ import { CLIENT_RENEG_WINDOW } from "tls";
 const login = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req);
 
     if (!email || !password) {
       res.status(401).json({

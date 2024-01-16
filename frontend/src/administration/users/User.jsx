@@ -18,7 +18,6 @@ const User = () => {
       .get(`/users/${id}`)
       .then((res) => {
         setLoading(false);
-        console.log(res?.data?.user);
         setUser(res?.data?.user);
       })
       .catch((err) => {

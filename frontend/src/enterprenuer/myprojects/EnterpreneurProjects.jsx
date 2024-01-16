@@ -118,7 +118,9 @@ const EnterpreneurProjects = () => {
                             className="text-green-500"
                           />
                         </Link>
-                        <Link to={`/enterpreneur/projects/edit/${project._id}`}>
+                        <Link
+                          to={`/enterpreneur/myprojects/edit/${project._id}`}
+                        >
                           <AiOutlineEdit
                             size={22}
                             title="Edit"

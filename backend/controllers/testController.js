@@ -3,6 +3,9 @@ import fs from "fs";
 import Test from "../models/testModel.js";
 import Datauri from "datauri";
 import path from "path";
+import fileUploader from "../middlewares/fileUploadMiddleware.js";
+// import { Grid } from "gridfs-stream";
+import mongoose from "mongoose";
 
 const uploadConvert = asyncHandler(async (req, res) => {});
 
@@ -70,4 +73,39 @@ const retrieveFileFromDB = async (filename) => {
   }
 };
 
-export { saveFileToDB };
+const saveFileToMongo = asyncHandler(async (req, res) => {
+  try {
+    if (req.file == undefined) {
+      return res.send("Please select file");
+    }
+
+    return res.status(200).json({
+      message: "File has been uploaded.",
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.send({
+      message: `Error when trying upload image: ${err}`,
+    });
+  }
+});
+
+// const downloadFile = asyncHandler(async (req, res) => {
+//   let gfs;
+//   conn.once("open", () => {
+//     gfs = new mongoose.mongo.GridFSBucket();
+//   });
+//   const file = gfs
+//     .find({ filename: "1703061428700_sites.txt" })
+//     .toArray((err, files) => {
+//       if (!files || files.length === 0) {
+//         return res.status(404).json({
+//           message: "no files found",
+//         });
+//       }
+//       gfs.openDownloadStreamByName("1703061428700_sites.txt").pipe(res);
+//     });
+// });
+
+export { saveFileToDB, saveFileToMongo };

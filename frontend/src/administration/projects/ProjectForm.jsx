@@ -24,6 +24,7 @@ const ProjectForm = () => {
   const { id } = useParams();
   const { userInfo } = useSelector((state) => state.auth);
   const [detailsId, setDetailsId] = useState("");
+  const [error, setError] = useState("");
   const [memberIds, setMemberIds] = useState();
   const [loading, setLoading] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
@@ -53,6 +54,14 @@ const ProjectForm = () => {
     name: "",
     position: "",
     description: "",
+    project_id: "",
+  });
+
+  const [file, setFile] = useState(null);
+  const [title, setTitle] = useState("");
+
+  const [document, setDocument] = useState({
+    filename: "",
     project_id: "",
   });
 
@@ -207,6 +216,44 @@ const ProjectForm = () => {
       .catch((err) => {
         setLoadMember(false);
         toast.error(err?.response?.data?.message);
+      });
+  };
+
+  const handleFileChange = async (e) => {
+    const pickedFile = e.target.files[0];
+    console.log("first");
+    if (pickedFile.type != "application/pdf") {
+      setError("Please select pdf files only");
+    }
+    setFile(pickedFile);
+    setTimeout(() => {
+      setError("");
+    }, 3000);
+  };
+
+  const saveDocument = async (e) => {
+    e.preventDefault();
+    setLoadDoc(true);
+
+    const formData = new FormData();
+    formData.append("document", file);
+    formData.append("filename", document.filename);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await axiosClient
+      .post(`/documents/${proj._id}/project`, formData, config)
+      .then((res) => {
+        setLoadDoc(false);
+        toast.success(res?.data?.message);
+      })
+      .catch((err) => {
+        setLoadDoc(false);
+        toast.error(err?.data?.message);
       });
   };
 
@@ -684,15 +731,49 @@ const ProjectForm = () => {
             <TabPanel>
               <h2 className="font-semibold mb-3">Documents</h2>
               <div className="">
-                <form>
+                <form enctype="multipart/form-data">
                   <div className="flex flex-col mb-2">
-                    <label htmlFor="">Project Name</label>
+                    <label htmlFor="">Document Name</label>
                     <input
                       type="text"
                       className="border p-2"
-                      placeholder="Enter your project name"
-                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your document title"
+                      onChange={(e) =>
+                        setDocument({ ...document, filename: e.target.value })
+                      }
                     />
+                  </div>
+                  <div className="flex flex-col mb-2">
+                    <label htmlFor="">
+                      Choose Document
+                      <span className="ml-2 text-xs text-[rgb(0,223,154)]">
+                        (PDF files only)
+                      </span>
+                    </label>
+                    <p
+                      className={`${
+                        error == "" ? "hidden" : "text-red-500 text-xs"
+                      }`}
+                    >
+                      {error}
+                    </p>
+                    <input
+                      type="file"
+                      className="border p-2"
+                      placeholder="Enter your project name"
+                      onChange={(e) => {
+                        handleFileChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="">
+                    <button
+                      type="submit"
+                      className="bg-[rgb(0,223,154)] py-2 w-full text-white"
+                      onClick={saveDocument}
+                    >
+                      {loadDoc ? "...Loading" : <>Save Document</>}
+                    </button>
                   </div>
                 </form>
               </div>
